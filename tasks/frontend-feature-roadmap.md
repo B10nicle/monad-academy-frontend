@@ -12,16 +12,16 @@ Legend:
 
 ## Progress Overview
 
-| Feature | Status | Notes |
-|---|---:|---|
-| feature/app-foundation | [ ] | Angular 21 application shell and project infrastructure |
-| feature/auth | [ ] | Register, login, email verification, current user session |
-| feature/task-catalog | [ ] | Public published task listing |
-| feature/task-workspace | [ ] | Task detail page, code editor, submit flow |
-| feature/submission-history | [ ] | Current user submission history |
-| feature/admin-task-management | [ ] | Admin create/update/publish/archive task flows |
-| feature/admin-submission-review | [ ] | Admin submission table and filters |
-| feature/backend-api-gaps | [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
+| Feature                         | Status | Notes                                                                    |
+| ------------------------------- | -----: | ------------------------------------------------------------------------ |
+| feature/app-foundation          |    [x] | Implemented in feature/app-foundation                                    |
+| feature/auth                    |    [ ] | Register, login, email verification, current user session                |
+| feature/task-catalog            |    [ ] | Public published task listing                                            |
+| feature/task-workspace          |    [ ] | Task detail page, code editor, submit flow                               |
+| feature/submission-history      |    [ ] | Current user submission history                                          |
+| feature/admin-task-management   |    [ ] | Admin create/update/publish/archive task flows                           |
+| feature/admin-submission-review |    [ ] | Admin submission table and filters                                       |
+| feature/backend-api-gaps        |    [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
 
 ---
 
@@ -29,7 +29,7 @@ Legend:
 
 ## 1. feature/app-foundation
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -46,6 +46,19 @@ Expected deliverables:
 - auth token interceptor
 - shared UI primitives
 - base tests and quality scripts
+
+Delivered:
+
+- Angular 21 project scaffold
+- strict TypeScript configuration
+- application shell with top navigation and route outlet
+- environment API base URL configuration
+- HTTP client with auth token and API error interceptors
+- typed pagination and API error helpers
+- current user session primitives
+- shared loading, empty, error, pagination, topic, difficulty, and submission status UI primitives
+- placeholder feature routes for the next planned features
+- build and unit test verification
 
 Dependencies:
 
