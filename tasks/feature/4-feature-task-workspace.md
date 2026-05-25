@@ -114,12 +114,28 @@ Unauthenticated users should see the task but not authenticated history.
 
 ## Acceptance Criteria
 
-- public users can read task details
-- unauthenticated submit attempts redirect or prompt for login
-- authenticated users can submit a solution
-- result status is visible after submission
-- task submission history loads for authenticated users
-- code editor remains usable during normal error states
+- [x] public users can read task details
+- [x] unauthenticated submit attempts redirect or prompt for login
+- [x] authenticated users can submit a solution
+- [x] result status is visible after submission
+- [x] task submission history loads for authenticated users
+- [x] code editor remains usable during normal error states
+
+## Delivered
+
+- `GET /api/tasks/{slug}` integration
+- task detail page at `/tasks/:slug`
+- problem statement panel
+- public test case panel
+- Monaco-backed Java editor initialized from `initialCode`
+- authenticated `POST /api/submissions` submit flow
+- unauthenticated submit redirect to login with `redirectTo`
+- latest submission result panel with status, duration, created time, and defensive metadata rendering
+- current user task submissions via `GET /api/tasks/{taskId}/submissions/my`
+- submitted source preview dialog
+- submissions API service and tests
+- task detail API and page tests
+- browser verification of task route error state when backend is offline
 
 ## Dependencies
 

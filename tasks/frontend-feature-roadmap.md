@@ -17,7 +17,7 @@ Legend:
 | feature/app-foundation          |    [x] | Implemented in feature/app-foundation                                    |
 | feature/auth                    |    [x] | Implemented in feature/auth                                              |
 | feature/task-catalog            |    [x] | Implemented in feature/task-catalog                                      |
-| feature/task-workspace          |    [ ] | Task detail page, code editor, submit flow                               |
+| feature/task-workspace          |    [x] | Implemented in feature/task-workspace                                    |
 | feature/submission-history      |    [ ] | Current user submission history                                          |
 | feature/admin-task-management   |    [ ] | Admin create/update/publish/archive task flows                           |
 | feature/admin-submission-review |    [ ] | Admin submission table and filters                                       |
@@ -140,7 +140,7 @@ Dependencies:
 
 ## 4. feature/task-workspace
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -155,6 +155,18 @@ Expected deliverables:
 - submit action
 - submission result panel
 - task-specific submission history
+
+Delivered:
+
+- public task detail API integration
+- Monaco-backed Java code editor
+- problem statement and public test case panels
+- authenticated submit flow
+- latest submission result panel
+- current user task-specific submission history
+- submitted source preview
+- unauthenticated login redirect for submit
+- task workspace and submissions API tests
 
 Dependencies:
 
