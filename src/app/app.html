@@ -16,9 +16,10 @@
     <div class="account">
       @if (session.currentUser(); as user) {
         <span class="user-chip">{{ user.username }}</span>
-        <button type="button" class="text-button" (click)="session.logout()">Log out</button>
+        <button type="button" class="text-button" (click)="logout()">Log out</button>
       } @else {
         <a class="text-button" routerLink="/login">Log in</a>
+        <a class="primary-button" routerLink="/register">Register</a>
       }
     </div>
   </header>

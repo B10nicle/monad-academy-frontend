@@ -136,12 +136,28 @@ Implement:
 
 ## Acceptance Criteria
 
-- unauthenticated users can browse public tasks
-- authenticated-only pages redirect unauthenticated users to login
-- admin pages reject non-admin users
-- JWT is attached to protected API calls
-- refresh with a valid token restores the current user
-- logout clears token and user state
+- [x] unauthenticated users can browse public tasks
+- [x] authenticated-only pages redirect unauthenticated users to login
+- [x] admin pages reject non-admin users
+- [x] JWT is attached to protected API calls
+- [x] refresh with a valid token restores the current user
+- [x] logout clears token and user state
+
+## Delivered
+
+- auth request/response DTO models
+- auth API service for register, login, verify email, and resend verification
+- login page with backend error mapping and `redirectTo` support
+- register page with client validation and backend success/error states
+- verify email page that reads `token` from query params
+- resend verification page
+- session initialization that restores `/api/users/me` from a stored JWT
+- auth token persistence and logout flow
+- auth, guest, and admin route guards
+- route protection for `/submissions` and `/admin`
+- app navigation updates for login, register, current user, and logout
+- unit tests for session loading, token interceptor, and guards
+- browser verification for public route, protected redirect, and auth pages
 
 ## Dependencies
 
