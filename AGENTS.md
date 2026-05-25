@@ -45,8 +45,10 @@ Rules:
 - never work directly in `main`
 - branch from `develop`
 - feature work must target `develop`
+- use one focused branch per feature or chore
 - keep changes scoped to the requested feature
 - do not rewrite branch history unless explicitly requested
+- after a PR is approved, merge it first, update local `develop`, then branch again for the next task
 
 Example:
 
@@ -54,6 +56,14 @@ Example:
 git switch develop
 git pull --ff-only origin develop
 git switch -c feature/<feature-name>
+```
+
+For non-feature repository work, use a descriptive chore branch:
+
+```bash
+git switch develop
+git pull --ff-only origin develop
+git switch -c chore/<short-name>
 ```
 
 ---
@@ -72,6 +82,19 @@ Target stack:
 - Monaco Editor for the coding workspace unless a better project-local choice is introduced
 
 Do not introduce a state management library by default. Add one only when the application has a concrete cross-feature state problem that Angular services/signals cannot handle cleanly.
+
+Local tooling notes:
+
+- this project targets Angular 21 and requires a modern Node runtime
+- on the current development machine, use Homebrew Node first:
+
+```bash
+PATH=/opt/homebrew/bin:$PATH npm run build
+PATH=/opt/homebrew/bin:$PATH npm test -- --watch=false
+PATH=/opt/homebrew/bin:$PATH npm start -- --host 127.0.0.1 --port 4200
+```
+
+- do not rely on the default shell Node if it is older than Angular's supported range
 
 ---
 
@@ -132,6 +155,8 @@ Backend base URL for local development:
 http://localhost:8080
 ```
 
+Local frontend development uses Angular's dev proxy for API calls. Keep `environment.development.ts` API base URL empty unless there is a concrete reason to bypass the proxy.
+
 Authentication:
 
 - login returns `AuthResponse.token`
@@ -146,8 +171,17 @@ Important backend behavior:
 - `/api/submissions/**` requires authentication
 - `/api/admin/**` requires `ADMIN`
 - Swagger may not declare security schemes, but backend security still applies
+- backend validation and authorization errors should be shown through existing loading, empty, and error states where possible
 
 Do not hardcode generated sample data into feature screens once API integration exists. Use explicit empty and loading states instead.
+
+When adding an API integration:
+
+- create a typed feature service near the feature that owns the workflow
+- keep request/response models explicit
+- add `HttpTestingController` tests for endpoint path, method, body, and query params
+- use `PageResponse<T>` and existing pagination helpers for paginated endpoints
+- preserve query params for list filters and pagination when it helps users share or reload the view
 
 ---
 
@@ -203,6 +237,13 @@ Testing expectations:
 - add unit tests for guards, interceptors, and non-trivial services
 - add focused component tests for forms and important state transitions
 - add e2e or integration coverage for critical flows once the app skeleton exists
+- run `npm run build` and `npm test -- --watch=false` before pushing a branch
+- after frontend route or UI changes, verify the relevant local route in the browser and check for console errors
+
+Formatting:
+
+- use Prettier for touched TypeScript, HTML templates, CSS-in-TS styles, and Markdown
+- avoid unrelated formatting churn in files outside the requested change
 
 ---
 
@@ -215,13 +256,13 @@ The frontend planning is based on:
 
 Primary supported features:
 
-- auth
-- current user session
-- public task list and details
-- authenticated code submissions
-- user submission history
-- admin task creation and lifecycle actions
-- admin submission review
+- auth: register, login, verify email, resend verification, logout, session bootstrap
+- current user session with auth, guest, and admin guards
+- public task catalog and task details
+- task workspace with Monaco editor, submit action, result panel, and task-specific submission history
+- authenticated user submission history with source and metadata previews
+- admin task creation, update-after-create, test case creation, publish, and archive actions
+- admin submission review with filters, pagination, source preview, and metadata preview
 
 Known backend limitations:
 
@@ -230,3 +271,62 @@ Known backend limitations:
 - no admin endpoint to list or fetch draft/archived tasks
 - no standalone endpoint to fetch a single submission by id
 - no profile, leaderboard, comments, collections, or ranking API yet
+
+---
+
+# Current Routes
+
+Public:
+
+- `/tasks`
+- `/tasks/:slug`
+
+Guest-only:
+
+- `/login`
+- `/register`
+- `/verify-email`
+- `/resend-verification`
+
+Authenticated:
+
+- `/submissions`
+
+Admin:
+
+- `/admin`
+- `/admin/tasks/new`
+- `/admin/tasks/:id/edit`
+- `/admin/submissions`
+
+`/admin/tasks/:id/edit` is intentionally limited because the backend does not currently expose an admin task detail endpoint.
+
+---
+
+# Feature Planning Files
+
+Task planning lives in:
+
+```text
+tasks/frontend-feature-roadmap.md
+tasks/feature/
+```
+
+Keep these files current when completing features:
+
+- mark the feature status in `tasks/frontend-feature-roadmap.md`
+- update the matching `tasks/feature/*` acceptance criteria
+- document backend limitations instead of hiding incomplete workflows in the UI
+
+---
+
+# Pull Request Expectations
+
+PRs should include:
+
+- concise summary of user-visible and API changes
+- tests run
+- browser verification when routes or UI are touched
+- known limitations, especially when blocked by missing backend endpoints
+
+Use reviewers consistently with the repository workflow. Do not merge your own PR until the user confirms approval.
