@@ -52,6 +52,22 @@ describe('SubmissionsApiService', () => {
     });
   });
 
+  it('should request current user submissions with pagination params', () => {
+    service.listCurrentUserSubmissions({ page: 2, size: 15 }).subscribe();
+
+    const request = httpTesting.expectOne(
+      'http://localhost:8080/api/submissions/my?page=2&size=15',
+    );
+    expect(request.request.method).toBe('GET');
+    request.flush({
+      content: [],
+      page: 2,
+      size: 15,
+      totalElements: 0,
+      totalPages: 0,
+    });
+  });
+
   it('should request current user task submissions with pagination params', () => {
     service.listCurrentUserTaskSubmissions('task-id', { page: 1, size: 10 }).subscribe();
 

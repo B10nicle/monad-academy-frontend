@@ -18,7 +18,7 @@ Legend:
 | feature/auth                    |    [x] | Implemented in feature/auth                                              |
 | feature/task-catalog            |    [x] | Implemented in feature/task-catalog                                      |
 | feature/task-workspace          |    [x] | Implemented in feature/task-workspace                                    |
-| feature/submission-history      |    [ ] | Current user submission history                                          |
+| feature/submission-history      |    [x] | Implemented in feature/submission-history                                |
 | feature/admin-task-management   |    [ ] | Admin create/update/publish/archive task flows                           |
 | feature/admin-submission-review |    [ ] | Admin submission table and filters                                       |
 | feature/backend-api-gaps        |    [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
@@ -178,7 +178,7 @@ Dependencies:
 
 ## 5. feature/submission-history
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -191,6 +191,17 @@ Expected deliverables:
 - status and duration display
 - source code preview
 - execution metadata rendering
+
+Delivered:
+
+- current user submissions API integration
+- authenticated `/submissions` page
+- query-param backed pagination
+- submission table with status, task id, duration, created, and updated timestamps
+- source code preview dialog
+- execution metadata preview dialog with defensive formatting
+- loading, empty, and API error states
+- service and page tests
 
 Dependencies:
 
