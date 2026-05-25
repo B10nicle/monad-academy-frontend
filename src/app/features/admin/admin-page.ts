@@ -15,6 +15,10 @@ import { RouterLink } from '@angular/router';
         <span>Task authoring</span>
         <strong>Create a task</strong>
       </a>
+      <a routerLink="/admin/submissions">
+        <span>Submission review</span>
+        <strong>Inspect submissions</strong>
+      </a>
     </section>
   `,
   styles: `

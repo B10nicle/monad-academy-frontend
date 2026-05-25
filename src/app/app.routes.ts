@@ -4,6 +4,7 @@ import { adminGuard } from './core/auth/admin.guard';
 import { authGuard } from './core/auth/auth.guard';
 import { guestGuard } from './core/auth/guest.guard';
 import { AdminPage } from './features/admin/admin-page';
+import { AdminSubmissionsPage } from './features/admin/admin-submissions-page';
 import { AdminTaskEditLimitedPage } from './features/admin/admin-task-edit-limited-page';
 import { AdminTaskFormPage } from './features/admin/admin-task-form-page';
 import { LoginPage } from './features/auth/login-page';
@@ -36,6 +37,11 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminPage,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/submissions',
+    component: AdminSubmissionsPage,
     canActivate: [adminGuard],
   },
   {

@@ -20,7 +20,7 @@ Legend:
 | feature/task-workspace          |    [x] | Implemented in feature/task-workspace                                    |
 | feature/submission-history      |    [x] | Implemented in feature/submission-history                                |
 | feature/admin-task-management   |    [x] | Implemented in feature/admin-task-management                             |
-| feature/admin-submission-review |    [ ] | Admin submission table and filters                                       |
+| feature/admin-submission-review |    [x] | Implemented in feature/admin-submission-review                           |
 | feature/backend-api-gaps        |    [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
 
 ---
@@ -253,7 +253,7 @@ Notes:
 
 ## 7. feature/admin-submission-review
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -272,6 +272,16 @@ Dependencies:
 
 - feature/app-foundation
 - feature/auth
+
+Delivered:
+
+- admin submission API client for global and user-scoped admin endpoints
+- `/admin/submissions` review page
+- query-param backed user id, task id, and status filters
+- paginated admin submission table
+- source code and execution metadata previews
+- admin home navigation entry
+- API and page tests
 
 ---
 
