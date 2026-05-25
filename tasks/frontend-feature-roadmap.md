@@ -15,7 +15,7 @@ Legend:
 | Feature                         | Status | Notes                                                                    |
 | ------------------------------- | -----: | ------------------------------------------------------------------------ |
 | feature/app-foundation          |    [x] | Implemented in feature/app-foundation                                    |
-| feature/auth                    |    [ ] | Register, login, email verification, current user session                |
+| feature/auth                    |    [x] | Implemented in feature/auth                                              |
 | feature/task-catalog            |    [ ] | Public published task listing                                            |
 | feature/task-workspace          |    [ ] | Task detail page, code editor, submit flow                               |
 | feature/submission-history      |    [ ] | Current user submission history                                          |
@@ -68,7 +68,7 @@ Dependencies:
 
 ## 2. feature/auth
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -85,6 +85,18 @@ Expected deliverables:
 - admin guard
 - token persistence
 - logout
+
+Delivered:
+
+- typed auth API client and DTO models
+- register page
+- login page with redirect support
+- verify email page
+- resend verification page
+- current user session bootstrap from stored JWT
+- auth, guest, and admin guards
+- bearer token HTTP interceptor coverage
+- session and guard tests
 
 Dependencies:
 

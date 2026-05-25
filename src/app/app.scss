@@ -50,7 +50,8 @@
 }
 
 .primary-nav a,
-.text-button {
+.text-button,
+.primary-button {
   min-height: 36px;
   padding: 8px 12px;
   border: 0;
@@ -68,6 +69,15 @@
 .text-button:hover {
   background: #edf1f5;
   color: #151922;
+}
+
+.primary-button {
+  background: #151922;
+  color: #ffffff;
+}
+
+.primary-button:hover {
+  background: #2d3645;
 }
 
 .account {
