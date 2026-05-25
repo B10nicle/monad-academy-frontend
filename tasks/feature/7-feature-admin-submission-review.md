@@ -86,12 +86,12 @@ Render metadata defensively because it is a string.
 
 ## Acceptance Criteria
 
-- non-admin users cannot access `/admin/submissions`
-- admins can list submissions
-- admins can filter by user id, task id, and status
-- admins can inspect source code
-- admins can inspect execution metadata
-- pagination works with filters
+- [x] non-admin users cannot access `/admin/submissions`
+- [x] admins can list submissions
+- [x] admins can filter by user id, task id, and status
+- [x] admins can inspect source code
+- [x] admins can inspect execution metadata
+- [x] pagination works with filters
 
 ## Dependencies
 
