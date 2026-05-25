@@ -19,7 +19,7 @@ Legend:
 | feature/task-catalog            |    [x] | Implemented in feature/task-catalog                                      |
 | feature/task-workspace          |    [x] | Implemented in feature/task-workspace                                    |
 | feature/submission-history      |    [x] | Implemented in feature/submission-history                                |
-| feature/admin-task-management   |    [ ] | Admin create/update/publish/archive task flows                           |
+| feature/admin-task-management   |    [x] | Implemented in feature/admin-task-management                             |
 | feature/admin-submission-review |    [ ] | Admin submission table and filters                                       |
 | feature/backend-api-gaps        |    [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
 
@@ -212,7 +212,7 @@ Dependencies:
 
 ## 6. feature/admin-task-management
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -226,6 +226,18 @@ Expected deliverables:
 - publish action
 - archive action
 - admin-only route protection
+
+Delivered:
+
+- admin task API client and DTO models
+- admin landing page
+- `/admin/tasks/new` task authoring workflow
+- create and update actions for the current created task
+- add test case form
+- publish and archive actions
+- `/admin/tasks/:id/edit` limitation page for missing backend detail endpoint
+- admin-only routes
+- API and page tests
 
 Dependencies:
 

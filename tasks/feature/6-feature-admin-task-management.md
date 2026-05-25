@@ -93,12 +93,26 @@ MVP behavior:
 
 ## Acceptance Criteria
 
-- non-admin users cannot access admin task routes
-- admins can create a task
-- admins can add test cases to a created task
-- admins can publish a task
-- admins can archive a task
-- forms show validation and API errors
+- [x] non-admin users cannot access admin task routes
+- [x] admins can create a task
+- [x] admins can add test cases to a created task
+- [x] admins can publish a task
+- [x] admins can archive a task
+- [x] forms show validation and API errors
+
+## Delivered
+
+- admin task request and response DTO models
+- `AdminTasksApiService` for create, update, add test case, publish, and archive endpoints
+- admin landing page
+- `/admin/tasks/new` create-first authoring page
+- task form with title, slug, description, difficulty, topic, status, initial code, and solution template
+- test case form with input, expected output, hidden flag, and order index
+- lifecycle actions for publish and archive
+- `/admin/tasks/:id/edit` limitation page explaining missing backend `GET /api/admin/tasks/{id}` support
+- admin-only route protection
+- API service tests
+- task form page tests
 
 ## Dependencies
 
