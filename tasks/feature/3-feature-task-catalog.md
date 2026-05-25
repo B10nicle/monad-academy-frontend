@@ -81,11 +81,26 @@ It is acceptable to add lightweight client-side UI only if it does not imply uns
 
 ## Acceptance Criteria
 
-- users can open the catalog without authentication
-- tasks load from the backend
-- pagination works against the backend response
-- clicking a task navigates to `/tasks/:slug`
-- empty and error states are visible and useful
+- [x] users can open the catalog without authentication
+- [x] tasks load from the backend
+- [x] pagination works against the backend response
+- [x] clicking a task navigates to `/tasks/:slug`
+- [x] empty and error states are visible and useful
+
+## Delivered
+
+- `PublicTaskSummary` model
+- `TasksApiService` for `GET /api/tasks?page&size`
+- `/tasks` catalog page
+- backend pagination through `page` and `size` query params
+- task list rows with title, difficulty badge, and topic badge
+- loading state
+- empty state
+- API error state with retry
+- invalid query param fallback handling
+- `/tasks/:slug` placeholder route for the next task workspace feature
+- unit tests for API request parameters and page rendering
+- browser verification of catalog shell and API error state when backend is offline
 
 ## Dependencies
 
