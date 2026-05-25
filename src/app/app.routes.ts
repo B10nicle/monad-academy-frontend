@@ -9,7 +9,8 @@ import { RegisterPage } from './features/auth/register-page';
 import { ResendVerificationPage } from './features/auth/resend-verification-page';
 import { VerifyEmailPage } from './features/auth/verify-email-page';
 import { SubmissionsPlaceholder } from './features/submissions/submissions-placeholder';
-import { TasksPlaceholder } from './features/tasks/tasks-placeholder';
+import { TaskDetailPlaceholder } from './features/tasks/task-detail-placeholder';
+import { TasksPage } from './features/tasks/tasks-page';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,11 @@ export const routes: Routes = [
   },
   {
     path: 'tasks',
-    component: TasksPlaceholder,
+    component: TasksPage,
+  },
+  {
+    path: 'tasks/:slug',
+    component: TaskDetailPlaceholder,
   },
   {
     path: 'submissions',

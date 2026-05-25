@@ -16,7 +16,7 @@ Legend:
 | ------------------------------- | -----: | ------------------------------------------------------------------------ |
 | feature/app-foundation          |    [x] | Implemented in feature/app-foundation                                    |
 | feature/auth                    |    [x] | Implemented in feature/auth                                              |
-| feature/task-catalog            |    [ ] | Public published task listing                                            |
+| feature/task-catalog            |    [x] | Implemented in feature/task-catalog                                      |
 | feature/task-workspace          |    [ ] | Task detail page, code editor, submit flow                               |
 | feature/submission-history      |    [ ] | Current user submission history                                          |
 | feature/admin-task-management   |    [ ] | Admin create/update/publish/archive task flows                           |
@@ -106,7 +106,7 @@ Dependencies:
 
 ## 3. feature/task-catalog
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -119,6 +119,18 @@ Expected deliverables:
 - difficulty and topic badges
 - loading, empty, and error states
 - navigation to task details
+
+Delivered:
+
+- typed public task summary model
+- public tasks API service for `GET /api/tasks`
+- `/tasks` catalog page backed by API pagination
+- query-param backed `page` and `size`
+- loading, empty, and error states
+- task rows with difficulty and topic badges
+- navigation to `/tasks/:slug`
+- task detail placeholder for the upcoming workspace feature
+- service and page unit tests
 
 Dependencies:
 
