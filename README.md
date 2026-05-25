@@ -46,6 +46,9 @@ The local backend API is expected at:
 http://localhost:8080
 ```
 
+In development, Angular dev server proxies `/api` and `/actuator` to the backend through
+`proxy.conf.json`, so browser requests stay same-origin on `localhost:4200`.
+
 ## Quality Checks
 
 Build:

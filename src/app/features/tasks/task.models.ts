@@ -8,3 +8,23 @@ export interface PublicTaskSummary {
   difficulty: TaskDifficulty;
   topic: TaskTopic;
 }
+
+export interface PublicTask {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  difficulty: TaskDifficulty;
+  topic: TaskTopic;
+  initialCode: string;
+  createdAt: string;
+  updatedAt: string;
+  testCases: PublicTaskTestCase[];
+}
+
+export interface PublicTaskTestCase {
+  id: string;
+  input: string;
+  expectedOutput: string;
+  orderIndex: number;
+}

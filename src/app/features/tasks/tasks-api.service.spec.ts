@@ -43,4 +43,23 @@ describe('TasksApiService', () => {
       totalPages: 0,
     });
   });
+
+  it('should request public task details by slug', () => {
+    service.getTask('stream-filter').subscribe();
+
+    const request = httpTesting.expectOne('http://localhost:8080/api/tasks/stream-filter');
+    expect(request.request.method).toBe('GET');
+    request.flush({
+      id: 'task-id',
+      title: 'Stream filter',
+      slug: 'stream-filter',
+      description: 'Filter values',
+      difficulty: 'EASY',
+      topic: 'STREAM_API',
+      initialCode: 'class Solution {}',
+      createdAt: '2026-05-25T00:00:00Z',
+      updatedAt: '2026-05-25T00:00:00Z',
+      testCases: [],
+    });
+  });
 });
