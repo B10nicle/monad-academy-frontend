@@ -3,7 +3,9 @@ import { Routes } from '@angular/router';
 import { adminGuard } from './core/auth/admin.guard';
 import { authGuard } from './core/auth/auth.guard';
 import { guestGuard } from './core/auth/guest.guard';
-import { AdminPlaceholder } from './features/admin/admin-placeholder';
+import { AdminPage } from './features/admin/admin-page';
+import { AdminTaskEditLimitedPage } from './features/admin/admin-task-edit-limited-page';
+import { AdminTaskFormPage } from './features/admin/admin-task-form-page';
 import { LoginPage } from './features/auth/login-page';
 import { RegisterPage } from './features/auth/register-page';
 import { ResendVerificationPage } from './features/auth/resend-verification-page';
@@ -33,7 +35,17 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminPlaceholder,
+    component: AdminPage,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/tasks/new',
+    component: AdminTaskFormPage,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/tasks/:id/edit',
+    component: AdminTaskEditLimitedPage,
     canActivate: [adminGuard],
   },
   {
