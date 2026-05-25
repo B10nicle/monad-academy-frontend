@@ -103,13 +103,29 @@ Create reusable primitives needed by upcoming features:
 
 ## Acceptance Criteria
 
-- application starts locally
-- route outlet renders
-- top navigation renders
-- API base URL is configurable
-- HTTP interceptor is registered
-- shared UI primitives compile
-- all generated tests pass or are intentionally updated
+- [x] application starts locally
+- [x] route outlet renders
+- [x] top navigation renders
+- [x] API base URL is configurable
+- [x] HTTP interceptor is registered
+- [x] shared UI primitives compile
+- [x] all generated tests pass or are intentionally updated
+
+## Delivered
+
+- Angular 21 application scaffold
+- strict TypeScript setup
+- application shell with responsive top navigation
+- `/tasks`, `/submissions`, `/admin`, and `/login` placeholder routes
+- environment configuration for `http://localhost:8080`
+- `API_BASE_URL` injection token
+- typed page response, API error normalization, and pagination helpers
+- auth token storage and auth token HTTP interceptor
+- API error HTTP interceptor
+- current user session service
+- shared loading, empty, error, pagination, difficulty badge, topic badge, and submission status badge components
+- README with local development commands
+- `.idea/` ignored by git
 
 ## Dependencies
 

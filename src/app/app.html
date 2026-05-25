@@ -1,0 +1,29 @@
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/tasks" aria-label="Monad Academy tasks">
+      <span class="brand-mark">M</span>
+      <span class="brand-text">Monad Academy</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      <a routerLink="/submissions" routerLinkActive="active">My submissions</a>
+      @if (session.isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+      }
+    </nav>
+
+    <div class="account">
+      @if (session.currentUser(); as user) {
+        <span class="user-chip">{{ user.username }}</span>
+        <button type="button" class="text-button" (click)="session.logout()">Log out</button>
+      } @else {
+        <a class="text-button" routerLink="/login">Log in</a>
+      }
+    </div>
+  </header>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
