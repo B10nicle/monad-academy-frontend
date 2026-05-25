@@ -18,6 +18,14 @@ export class SubmissionsApiService {
     return this.http.post<Submission>(`${this.apiBaseUrl}/api/submissions`, request);
   }
 
+  listCurrentUserSubmissions(
+    request: PaginationRequest = {},
+  ): Observable<PageResponse<Submission>> {
+    return this.http.get<PageResponse<Submission>>(`${this.apiBaseUrl}/api/submissions/my`, {
+      params: paginationParams(request),
+    });
+  }
+
   listCurrentUserTaskSubmissions(
     taskId: string,
     request: PaginationRequest = {},

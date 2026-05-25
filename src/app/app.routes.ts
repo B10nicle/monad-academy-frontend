@@ -8,7 +8,7 @@ import { LoginPage } from './features/auth/login-page';
 import { RegisterPage } from './features/auth/register-page';
 import { ResendVerificationPage } from './features/auth/resend-verification-page';
 import { VerifyEmailPage } from './features/auth/verify-email-page';
-import { SubmissionsPlaceholder } from './features/submissions/submissions-placeholder';
+import { SubmissionsPage } from './features/submissions/submissions-page';
 import { TaskDetailPage } from './features/tasks/task-detail-page';
 import { TasksPage } from './features/tasks/tasks-page';
 
@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'submissions',
-    component: SubmissionsPlaceholder,
+    component: SubmissionsPage,
     canActivate: [authGuard],
   },
   {

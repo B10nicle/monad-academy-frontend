@@ -74,11 +74,25 @@ Handle:
 
 ## Acceptance Criteria
 
-- unauthenticated users cannot open `/submissions`
-- authenticated users can page through their submissions
-- source code can be inspected without leaving the page
-- execution metadata is readable
-- status badges are consistent with task workspace status badges
+- [x] unauthenticated users cannot open `/submissions`
+- [x] authenticated users can page through their submissions
+- [x] source code can be inspected without leaving the page
+- [x] execution metadata is readable
+- [x] status badges are consistent with task workspace status badges
+
+## Delivered
+
+- `GET /api/submissions/my` integration
+- `/submissions` page backed by authenticated API data
+- query-param backed pagination through `page` and `size`
+- submission table with status, task id, duration, created time, updated time, and actions
+- source code preview dialog
+- execution metadata preview dialog
+- defensive metadata rendering for JSON, plain text, and empty values
+- loading state
+- empty state
+- API error state with retry
+- API service and page tests
 
 ## Dependencies
 
