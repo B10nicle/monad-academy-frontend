@@ -45,7 +45,9 @@ Rules:
 - never work directly in `main`
 - branch from `develop`
 - feature work must target `develop`
-- use one focused branch per feature or chore
+- use only `feature/*` and `bugfix/*` branch names
+- use `feature/*` for planned work, documentation updates, and repository maintenance
+- use `bugfix/*` only for defects or regressions
 - keep changes scoped to the requested feature
 - do not rewrite branch history unless explicitly requested
 - after a PR is approved, merge it first, update local `develop`, then branch again for the next task
@@ -58,12 +60,12 @@ git pull --ff-only origin develop
 git switch -c feature/<feature-name>
 ```
 
-For non-feature repository work, use a descriptive chore branch:
+For bug fixes:
 
 ```bash
 git switch develop
 git pull --ff-only origin develop
-git switch -c chore/<short-name>
+git switch -c bugfix/<bug-name>
 ```
 
 ---
