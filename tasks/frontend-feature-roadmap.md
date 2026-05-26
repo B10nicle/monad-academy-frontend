@@ -12,16 +12,16 @@ Legend:
 
 ## Progress Overview
 
-| Feature                         | Status | Notes                                                                    |
-| ------------------------------- | -----: | ------------------------------------------------------------------------ |
-| feature/app-foundation          |    [x] | Implemented in feature/app-foundation                                    |
-| feature/auth                    |    [x] | Implemented in feature/auth                                              |
-| feature/task-catalog            |    [x] | Implemented in feature/task-catalog                                      |
-| feature/task-workspace          |    [x] | Implemented in feature/task-workspace                                    |
-| feature/submission-history      |    [x] | Implemented in feature/submission-history                                |
-| feature/admin-task-management   |    [x] | Implemented in feature/admin-task-management                             |
-| feature/admin-submission-review |    [x] | Implemented in feature/admin-submission-review                           |
-| feature/backend-api-gaps        |    [ ] | Track backend endpoints needed for a fuller LeetCode/Codewars experience |
+| Feature                         | Status | Notes                                           |
+| ------------------------------- | -----: | ----------------------------------------------- |
+| feature/app-foundation          |    [x] | Implemented in feature/app-foundation           |
+| feature/auth                    |    [x] | Implemented in feature/auth                     |
+| feature/task-catalog            |    [x] | Implemented in feature/task-catalog             |
+| feature/task-workspace          |    [x] | Implemented in feature/task-workspace           |
+| feature/submission-history      |    [x] | Implemented in feature/submission-history       |
+| feature/admin-task-management   |    [x] | Implemented in feature/admin-task-management    |
+| feature/admin-submission-review |    [x] | Implemented in feature/admin-submission-review  |
+| feature/backend-api-gaps        |    [x] | Documented backend endpoint gaps and priorities |
 
 ---
 
@@ -287,7 +287,7 @@ Delivered:
 
 ## 8. feature/backend-api-gaps
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -299,9 +299,18 @@ Expected deliverables:
 - UX impact for each missing endpoint
 - proposed API contracts where useful
 
+Delivered:
+
+- prioritized backend gap summary
+- proposed contracts for admin task read APIs, task catalog filters, progress read APIs, submission details, profiles, leaderboard, and discussions
+- UX impact for every missing endpoint group
+- backend feature candidates ordered by frontend value
+- security and visibility notes for user/admin APIs
+
 Dependencies:
 
 - feature/task-catalog
 - feature/task-workspace
 - feature/admin-task-management
 - feature/submission-history
+- feature/admin-submission-review
