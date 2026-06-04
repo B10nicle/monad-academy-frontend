@@ -17,7 +17,7 @@ import type * as Monaco from 'monaco-editor';
   styles: `
     .editor-host {
       width: 100%;
-      height: 420px;
+      height: 520px;
       min-height: 280px;
       overflow: hidden;
       border: 1px solid #cfd6e1;

@@ -27,7 +27,7 @@ export class SubmissionsApiService {
   }
 
   listCurrentUserTaskSubmissions(
-    taskId: string,
+    taskId: number,
     request: PaginationRequest = {},
   ): Observable<PageResponse<Submission>> {
     return this.http.get<PageResponse<Submission>>(

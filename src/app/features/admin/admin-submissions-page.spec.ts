@@ -16,9 +16,9 @@ describe('AdminSubmissionsPage', () => {
         of({
           content: [
             {
-              id: 'submission-id',
-              userId: 'user-id',
-              taskId: 'task-id',
+              id: 3,
+              userId: 4,
+              taskId: 1,
               sourceCode: 'class Solution {}',
               status: 'ACCEPTED',
               executionMetadata: '{"status":"ACCEPTED"}',
@@ -44,8 +44,8 @@ describe('AdminSubmissionsPage', () => {
           useValue: {
             queryParamMap: of(
               convertToParamMap({
-                userId: 'user-id',
-                taskId: 'task-id',
+                userId: '4',
+                taskId: '1',
                 status: 'ACCEPTED',
                 page: '1',
                 size: '10',
@@ -70,15 +70,15 @@ describe('AdminSubmissionsPage', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(adminSubmissionsApi.listSubmissions).toHaveBeenCalledWith({
-      userId: 'user-id',
-      taskId: 'task-id',
+      userId: '4',
+      taskId: '1',
       status: 'ACCEPTED',
       page: 1,
       size: 10,
     });
-    expect(compiled.textContent).toContain('submission-id');
-    expect(compiled.textContent).toContain('user-id');
-    expect(compiled.textContent).toContain('task-id');
+    expect(compiled.textContent).toContain('3');
+    expect(compiled.textContent).toContain('4');
+    expect(compiled.textContent).toContain('1');
     expect(compiled.textContent).toContain('42 ms');
   });
 
@@ -90,8 +90,8 @@ describe('AdminSubmissionsPage', () => {
 
     expect(navigateSpy).toHaveBeenCalledWith(['/admin/submissions'], {
       queryParams: {
-        userId: 'user-id',
-        taskId: 'task-id',
+        userId: '4',
+        taskId: '1',
         status: 'ACCEPTED',
         page: 2,
         size: 10,

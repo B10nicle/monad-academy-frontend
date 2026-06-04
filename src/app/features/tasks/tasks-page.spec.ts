@@ -18,7 +18,7 @@ describe('TasksPage', () => {
         of({
           content: [
             {
-              id: 'task-id',
+              id: 1,
               title: 'Stream filter',
               slug: 'stream-filter',
               difficulty: 'EASY',

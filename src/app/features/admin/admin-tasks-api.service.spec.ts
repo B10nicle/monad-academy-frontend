@@ -11,11 +11,14 @@ describe('AdminTasksApiService', () => {
     title: 'Stream filter',
     slug: 'stream-filter',
     description: 'Filter values',
+    methodName: 'mapValues',
+    methodReturnType: 'String',
+    methodParameters: 'String input',
     difficulty: 'EASY',
     topic: 'STREAM_API',
     status: 'DRAFT',
-    initialCode: 'class Solution {}',
-    solutionTemplate: 'class Solution {}',
+    initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
+    solutionTemplate: 'class Solution { public String mapValues(String input) { return input; } }',
     testCases: [],
   };
 
@@ -53,9 +56,9 @@ describe('AdminTasksApiService', () => {
   });
 
   it('should update an admin task', () => {
-    service.updateTask('task-id', taskRequest).subscribe();
+    service.updateTask(1, taskRequest).subscribe();
 
-    const request = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/task-id');
+    const request = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/1');
     expect(request.request.method).toBe('PUT');
     expect(request.request.body).toEqual(taskRequest);
     request.flush(responseBody());
@@ -63,7 +66,7 @@ describe('AdminTasksApiService', () => {
 
   it('should add a test case', () => {
     service
-      .addTestCase('task-id', {
+      .addTestCase(1, {
         input: '1 2 3',
         expectedOutput: '2',
         hidden: false,
@@ -71,13 +74,11 @@ describe('AdminTasksApiService', () => {
       })
       .subscribe();
 
-    const request = httpTesting.expectOne(
-      'http://localhost:8080/api/admin/tasks/task-id/test-cases',
-    );
+    const request = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/1/test-cases');
     expect(request.request.method).toBe('POST');
     request.flush({
-      id: 'case-id',
-      taskId: 'task-id',
+      id: 2,
+      taskId: 1,
       input: '1 2 3',
       expectedOutput: '2',
       hidden: false,
@@ -87,21 +88,21 @@ describe('AdminTasksApiService', () => {
   });
 
   it('should publish and archive a task', () => {
-    service.publishTask('task-id').subscribe();
-    service.archiveTask('task-id').subscribe();
+    service.publishTask(1).subscribe();
+    service.archiveTask(1).subscribe();
 
-    const publish = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/task-id/publish');
+    const publish = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/1/publish');
     expect(publish.request.method).toBe('POST');
     publish.flush(responseBody({ status: 'PUBLISHED' }));
 
-    const archive = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/task-id/archive');
+    const archive = httpTesting.expectOne('http://localhost:8080/api/admin/tasks/1/archive');
     expect(archive.request.method).toBe('POST');
     archive.flush(responseBody({ status: 'ARCHIVED' }));
   });
 
   function responseBody(overrides: Partial<Record<string, unknown>> = {}) {
     return {
-      id: 'task-id',
+      id: 1,
       ...taskRequest,
       createdAt: '2026-05-25T00:00:00Z',
       updatedAt: '2026-05-25T00:00:00Z',

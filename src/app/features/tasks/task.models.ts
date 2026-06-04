@@ -2,7 +2,7 @@ import { TaskDifficulty } from '../../shared/badges/difficulty-badge';
 import { TaskTopic } from '../../shared/badges/topic-badge';
 
 export interface PublicTaskSummary {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   difficulty: TaskDifficulty;
@@ -10,10 +10,13 @@ export interface PublicTaskSummary {
 }
 
 export interface PublicTask {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   description: string;
+  methodName: string;
+  methodReturnType: string;
+  methodParameters: string;
   difficulty: TaskDifficulty;
   topic: TaskTopic;
   initialCode: string;
@@ -23,7 +26,7 @@ export interface PublicTask {
 }
 
 export interface PublicTaskTestCase {
-  id: string;
+  id: number;
   input: string;
   expectedOutput: string;
   orderIndex: number;

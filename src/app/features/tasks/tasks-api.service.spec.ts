@@ -50,13 +50,16 @@ describe('TasksApiService', () => {
     const request = httpTesting.expectOne('http://localhost:8080/api/tasks/stream-filter');
     expect(request.request.method).toBe('GET');
     request.flush({
-      id: 'task-id',
+      id: 1,
+      methodName: 'mapValues',
+      methodReturnType: 'String',
+      methodParameters: 'String input',
       title: 'Stream filter',
       slug: 'stream-filter',
       description: 'Filter values',
       difficulty: 'EASY',
       topic: 'STREAM_API',
-      initialCode: 'class Solution {}',
+      initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
       createdAt: '2026-05-25T00:00:00Z',
       updatedAt: '2026-05-25T00:00:00Z',
       testCases: [],

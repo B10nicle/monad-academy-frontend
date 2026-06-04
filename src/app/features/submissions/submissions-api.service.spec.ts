@@ -31,18 +31,18 @@ describe('SubmissionsApiService', () => {
   });
 
   it('should create a submission', () => {
-    service.createSubmission({ taskId: 'task-id', sourceCode: 'class Solution {}' }).subscribe();
+    service.createSubmission({ taskId: 1, sourceCode: 'class Solution {}' }).subscribe();
 
     const request = httpTesting.expectOne('http://localhost:8080/api/submissions');
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({
-      taskId: 'task-id',
+      taskId: 1,
       sourceCode: 'class Solution {}',
     });
     request.flush({
-      id: 'submission-id',
-      userId: 'user-id',
-      taskId: 'task-id',
+      id: 3,
+      userId: 4,
+      taskId: 1,
       sourceCode: 'class Solution {}',
       status: 'ACCEPTED',
       executionMetadata: '{}',
@@ -69,10 +69,10 @@ describe('SubmissionsApiService', () => {
   });
 
   it('should request current user task submissions with pagination params', () => {
-    service.listCurrentUserTaskSubmissions('task-id', { page: 1, size: 10 }).subscribe();
+    service.listCurrentUserTaskSubmissions(1, { page: 1, size: 10 }).subscribe();
 
     const request = httpTesting.expectOne(
-      'http://localhost:8080/api/tasks/task-id/submissions/my?page=1&size=10',
+      'http://localhost:8080/api/tasks/1/submissions/my?page=1&size=10',
     );
     expect(request.request.method).toBe('GET');
     request.flush({

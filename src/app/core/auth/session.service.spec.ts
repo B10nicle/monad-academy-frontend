@@ -9,7 +9,7 @@ import { SessionService } from './session.service';
 
 describe('SessionService', () => {
   const user: CurrentUser = {
-    id: 'user-id',
+    id: 4,
     email: 'user@example.com',
     username: 'user',
     role: 'USER',

@@ -82,6 +82,26 @@ import { TasksApiService } from './tasks-api.service';
         <section class="panel editor-panel">
           <div class="panel-heading">
             <h2>Solution</h2>
+          </div>
+
+          <div class="solution-signature" aria-label="Solution signature">
+            <span class="signature-class">class Solution</span>
+            <span class="signature-brace">{{ '{' }}</span>
+            <span class="signature-method">
+              {{ currentTask.methodReturnType }} {{ currentTask.methodName }}({{
+                currentTask.methodParameters
+              }})
+            </span>
+            <span class="signature-brace">{{ '}' }}</span>
+          </div>
+
+          <app-code-editor
+            [value]="sourceCode()"
+            [disabled]="submitting()"
+            (valueChange)="sourceCode.set($event)"
+          />
+
+          <div class="editor-actions">
             <button
               type="button"
               class="submit-button"
@@ -91,12 +111,6 @@ import { TasksApiService } from './tasks-api.service';
               {{ submitLabel() }}
             </button>
           </div>
-
-          <app-code-editor
-            [value]="sourceCode()"
-            [disabled]="submitting()"
-            (valueChange)="sourceCode.set($event)"
-          />
 
           @if (submitError()) {
             <p class="api-error">{{ submitError() }}</p>
@@ -288,6 +302,44 @@ import { TasksApiService } from './tasks-api.service';
     .editor-panel {
       display: grid;
       gap: 16px;
+    }
+
+    .editor-panel app-code-editor {
+      display: block;
+      min-height: 520px;
+    }
+
+    .solution-signature {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #c9ddf2;
+      border-radius: 8px;
+      background: #f4f9ff;
+      color: #2d3645;
+      font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .signature-class {
+      color: #244a76;
+    }
+
+    .signature-method {
+      color: #116631;
+    }
+
+    .signature-brace {
+      color: #697386;
+    }
+
+    .editor-actions {
+      display: flex;
+      justify-content: flex-end;
     }
 
     .submit-button,
@@ -508,7 +560,7 @@ export class TaskDetailPage {
     });
   }
 
-  protected loadSubmissionHistory(taskId: string): void {
+  protected loadSubmissionHistory(taskId: number): void {
     this.historyLoading.set(true);
     this.historyError.set(null);
 
