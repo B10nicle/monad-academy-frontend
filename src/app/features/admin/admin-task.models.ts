@@ -7,6 +7,9 @@ export interface TaskRequest {
   title: string;
   slug: string;
   description: string;
+  methodName: string;
+  methodReturnType: string;
+  methodParameters: string;
   difficulty: TaskDifficulty;
   topic: TaskTopic;
   status: TaskStatus;
@@ -23,10 +26,13 @@ export interface TaskTestCaseRequest {
 }
 
 export interface TaskResponse {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   description: string;
+  methodName: string;
+  methodReturnType: string;
+  methodParameters: string;
   difficulty: TaskDifficulty;
   topic: TaskTopic;
   status: TaskStatus;
@@ -38,8 +44,8 @@ export interface TaskResponse {
 }
 
 export interface TaskTestCaseResponse {
-  id: string;
-  taskId: string;
+  id: number;
+  taskId: number;
   input: string;
   expectedOutput: string;
   hidden: boolean;

@@ -57,11 +57,11 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
     <form class="filters" [formGroup]="filtersForm" (ngSubmit)="applyFilters()">
       <label>
         User id
-        <input type="text" formControlName="userId" placeholder="UUID" />
+        <input type="text" formControlName="userId" placeholder="User ID" />
       </label>
       <label>
         Task id
-        <input type="text" formControlName="taskId" placeholder="UUID" />
+        <input type="text" formControlName="taskId" placeholder="Task ID" />
       </label>
       <label>
         Status

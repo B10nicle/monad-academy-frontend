@@ -80,6 +80,27 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
           <textarea rows="8" formControlName="description"></textarea>
         </label>
 
+        <section class="method-panel" aria-label="Solution method signature">
+          <div class="method-heading">
+            <h3>Solution method</h3>
+            <p>Must match the method declared in both code templates.</p>
+          </div>
+          <div class="field three-columns">
+            <label>
+              Method name
+              <input type="text" formControlName="methodName" placeholder="mapValues" />
+            </label>
+            <label>
+              Return type
+              <input type="text" formControlName="methodReturnType" placeholder="String" />
+            </label>
+            <label>
+              Parameters
+              <input type="text" formControlName="methodParameters" placeholder="String input" />
+            </label>
+          </div>
+        </section>
+
         <label class="field">
           Initial code
           <textarea rows="10" formControlName="initialCode"></textarea>
@@ -258,6 +279,27 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
       gap: 7px;
     }
 
+    .method-panel {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #d7e5f5;
+      border-radius: 8px;
+      background: #f5f9ff;
+    }
+
+    .method-heading {
+      display: grid;
+      gap: 4px;
+    }
+
+    .method-heading p {
+      margin: 0;
+      color: #465163;
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
     .two-columns {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -401,6 +443,9 @@ export class AdminTaskFormPage {
     title: ['', Validators.required],
     slug: ['', Validators.required],
     description: ['', Validators.required],
+    methodName: ['', Validators.required],
+    methodReturnType: ['', Validators.required],
+    methodParameters: ['', Validators.required],
     difficulty: ['EASY', Validators.required],
     topic: ['STREAM_API', Validators.required],
     status: ['DRAFT', Validators.required],
@@ -534,6 +579,9 @@ export class AdminTaskFormPage {
       title: task.title,
       slug: task.slug,
       description: task.description,
+      methodName: task.methodName,
+      methodReturnType: task.methodReturnType,
+      methodParameters: task.methodParameters,
       difficulty: task.difficulty,
       topic: task.topic,
       status: task.status,

@@ -16,9 +16,9 @@ describe('SubmissionsPage', () => {
         of({
           content: [
             {
-              id: 'submission-id',
-              userId: 'user-id',
-              taskId: 'task-id',
+              id: 3,
+              userId: 4,
+              taskId: 1,
               sourceCode: 'class Solution {}',
               status: 'ACCEPTED',
               executionMetadata: '{"status":"ACCEPTED"}',
@@ -66,7 +66,7 @@ describe('SubmissionsPage', () => {
       size: 20,
     });
     expect(compiled.textContent).toContain('ACCEPTED');
-    expect(compiled.textContent).toContain('task-id');
+    expect(compiled.textContent).toContain('1');
     expect(compiled.textContent).toContain('42 ms');
   });
 

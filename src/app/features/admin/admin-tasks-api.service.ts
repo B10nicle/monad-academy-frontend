@@ -21,22 +21,22 @@ export class AdminTasksApiService {
     return this.http.post<TaskResponse>(`${this.apiBaseUrl}/api/admin/tasks`, request);
   }
 
-  updateTask(id: string, request: TaskRequest): Observable<TaskResponse> {
+  updateTask(id: number, request: TaskRequest): Observable<TaskResponse> {
     return this.http.put<TaskResponse>(`${this.apiBaseUrl}/api/admin/tasks/${id}`, request);
   }
 
-  addTestCase(id: string, request: TaskTestCaseRequest): Observable<TaskTestCaseResponse> {
+  addTestCase(id: number, request: TaskTestCaseRequest): Observable<TaskTestCaseResponse> {
     return this.http.post<TaskTestCaseResponse>(
       `${this.apiBaseUrl}/api/admin/tasks/${id}/test-cases`,
       request,
     );
   }
 
-  publishTask(id: string): Observable<TaskResponse> {
+  publishTask(id: number): Observable<TaskResponse> {
     return this.http.post<TaskResponse>(`${this.apiBaseUrl}/api/admin/tasks/${id}/publish`, {});
   }
 
-  archiveTask(id: string): Observable<TaskResponse> {
+  archiveTask(id: number): Observable<TaskResponse> {
     return this.http.post<TaskResponse>(`${this.apiBaseUrl}/api/admin/tasks/${id}/archive`, {});
   }
 }

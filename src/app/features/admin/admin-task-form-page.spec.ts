@@ -17,15 +17,19 @@ describe('AdminTaskFormPage', () => {
     adminTasksApi = {
       createTask: vi.fn().mockReturnValue(
         of({
-          id: 'task-id',
+          id: 1,
           title: 'Stream filter',
           slug: 'stream-filter',
           description: 'Filter values',
+          methodName: 'mapValues',
+          methodReturnType: 'String',
+          methodParameters: 'String input',
           difficulty: 'EASY',
           topic: 'STREAM_API',
           status: 'DRAFT',
-          initialCode: 'class Solution {}',
-          solutionTemplate: 'class Solution {}',
+          initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
+          solutionTemplate:
+            'class Solution { public String mapValues(String input) { return input; } }',
           createdAt: '2026-05-25T00:00:00Z',
           updatedAt: '2026-05-25T00:00:00Z',
           testCases: [],
@@ -67,11 +71,15 @@ describe('AdminTaskFormPage', () => {
       title: 'Stream filter',
       slug: 'stream-filter',
       description: 'Filter values',
+      methodName: 'mapValues',
+      methodReturnType: 'String',
+      methodParameters: 'String input',
       difficulty: 'EASY',
       topic: 'STREAM_API',
       status: 'DRAFT',
-      initialCode: 'class Solution {}',
-      solutionTemplate: 'class Solution {}',
+      initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
+      solutionTemplate:
+        'class Solution { public String mapValues(String input) { return input; } }',
     });
 
     component['saveTask']();
@@ -80,11 +88,15 @@ describe('AdminTaskFormPage', () => {
       title: 'Stream filter',
       slug: 'stream-filter',
       description: 'Filter values',
+      methodName: 'mapValues',
+      methodReturnType: 'String',
+      methodParameters: 'String input',
       difficulty: 'EASY',
       topic: 'STREAM_API',
       status: 'DRAFT',
-      initialCode: 'class Solution {}',
-      solutionTemplate: 'class Solution {}',
+      initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
+      solutionTemplate:
+        'class Solution { public String mapValues(String input) { return input; } }',
       testCases: [],
     });
   });

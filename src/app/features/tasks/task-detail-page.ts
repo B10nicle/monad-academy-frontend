@@ -82,6 +82,15 @@ import { TasksApiService } from './tasks-api.service';
         <section class="panel editor-panel">
           <div class="panel-heading">
             <h2>Solution</h2>
+          </div>
+
+          <app-code-editor
+            [value]="sourceCode()"
+            [disabled]="submitting()"
+            (valueChange)="sourceCode.set($event)"
+          />
+
+          <div class="editor-actions">
             <button
               type="button"
               class="submit-button"
@@ -91,12 +100,6 @@ import { TasksApiService } from './tasks-api.service';
               {{ submitLabel() }}
             </button>
           </div>
-
-          <app-code-editor
-            [value]="sourceCode()"
-            [disabled]="submitting()"
-            (valueChange)="sourceCode.set($event)"
-          />
 
           @if (submitError()) {
             <p class="api-error">{{ submitError() }}</p>
@@ -230,9 +233,12 @@ import { TasksApiService } from './tasks-api.service';
 
     .workspace-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.1fr);
+      grid-template-columns: minmax(300px, 0.75fr) minmax(720px, 1.35fr);
       gap: 20px;
       align-items: start;
+      width: min(1540px, calc(100vw - 64px));
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
 
     .panel {
@@ -288,6 +294,16 @@ import { TasksApiService } from './tasks-api.service';
     .editor-panel {
       display: grid;
       gap: 16px;
+    }
+
+    .editor-panel app-code-editor {
+      display: block;
+      min-height: 624px;
+    }
+
+    .editor-actions {
+      display: flex;
+      justify-content: flex-end;
     }
 
     .submit-button,
@@ -406,6 +422,9 @@ import { TasksApiService } from './tasks-api.service';
 
     @media (max-width: 940px) {
       .workspace-grid {
+        width: auto;
+        margin-left: 0;
+        transform: none;
         grid-template-columns: 1fr;
       }
 
@@ -508,7 +527,7 @@ export class TaskDetailPage {
     });
   }
 
-  protected loadSubmissionHistory(taskId: string): void {
+  protected loadSubmissionHistory(taskId: number): void {
     this.historyLoading.set(true);
     this.historyError.set(null);
 

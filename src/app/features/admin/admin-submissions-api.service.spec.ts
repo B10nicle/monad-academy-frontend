@@ -33,8 +33,8 @@ describe('AdminSubmissionsApiService', () => {
   it('should request admin submissions with filters and pagination', () => {
     service
       .listSubmissions({
-        userId: 'user-id',
-        taskId: 'task-id',
+        userId: '4',
+        taskId: '1',
         status: 'ACCEPTED',
         page: 2,
         size: 15,
@@ -42,7 +42,7 @@ describe('AdminSubmissionsApiService', () => {
       .subscribe();
 
     const request = httpTesting.expectOne(
-      'http://localhost:8080/api/admin/submissions?page=2&size=15&userId=user-id&taskId=task-id&status=ACCEPTED',
+      'http://localhost:8080/api/admin/submissions?page=2&size=15&userId=4&taskId=1&status=ACCEPTED',
     );
     expect(request.request.method).toBe('GET');
     request.flush(pageResponse());
@@ -50,8 +50,8 @@ describe('AdminSubmissionsApiService', () => {
 
   it('should request a specific user submission history', () => {
     service
-      .listUserSubmissions('user-id', {
-        taskId: 'task-id',
+      .listUserSubmissions('4', {
+        taskId: '1',
         status: 'WRONG_ANSWER',
         page: 1,
         size: 10,
@@ -59,7 +59,7 @@ describe('AdminSubmissionsApiService', () => {
       .subscribe();
 
     const request = httpTesting.expectOne(
-      'http://localhost:8080/api/admin/users/user-id/submissions?page=1&size=10&taskId=task-id&status=WRONG_ANSWER',
+      'http://localhost:8080/api/admin/users/4/submissions?page=1&size=10&taskId=1&status=WRONG_ANSWER',
     );
     expect(request.request.method).toBe('GET');
     request.flush(pageResponse());

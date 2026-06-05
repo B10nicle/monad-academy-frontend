@@ -32,18 +32,21 @@ describe('TaskDetailPage', () => {
     tasksApi = {
       getTask: vi.fn().mockReturnValue(
         of({
-          id: 'task-id',
+          id: 1,
           title: 'Stream filter',
           slug: 'stream-filter',
           description: 'Filter values',
+          methodName: 'mapValues',
+          methodReturnType: 'String',
+          methodParameters: 'String input',
           difficulty: 'EASY',
           topic: 'STREAM_API',
-          initialCode: 'class Solution {}',
+          initialCode: 'class Solution { public String mapValues(String input) { return input; } }',
           createdAt: '2026-05-25T00:00:00Z',
           updatedAt: '2026-05-25T00:00:00Z',
           testCases: [
             {
-              id: 'case-id',
+              id: 2,
               input: '1 2 3',
               expectedOutput: '2',
               orderIndex: 0,
