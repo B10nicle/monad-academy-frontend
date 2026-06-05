@@ -79,105 +79,107 @@ import { TasksApiService } from './tasks-api.service';
           }
         </article>
 
-        <section class="panel editor-panel">
-          <div class="panel-heading">
-            <h2>Solution</h2>
-          </div>
+        <div class="solution-stack">
+          <section class="panel editor-panel">
+            <div class="panel-heading">
+              <h2>Solution</h2>
+            </div>
 
-          <app-code-editor
-            [value]="sourceCode()"
-            [disabled]="submitting()"
-            (valueChange)="sourceCode.set($event)"
-          />
-
-          <div class="editor-actions">
-            <button
-              type="button"
-              class="submit-button"
+            <app-code-editor
+              [value]="sourceCode()"
               [disabled]="submitting()"
-              (click)="submit()"
-            >
-              {{ submitLabel() }}
-            </button>
-          </div>
-
-          @if (submitError()) {
-            <p class="api-error">{{ submitError() }}</p>
-          }
-
-          @if (latestSubmission(); as submission) {
-            <div class="result-panel">
-              <div class="result-heading">
-                <h3>Latest result</h3>
-                <app-submission-status-badge [status]="submission.status" />
-              </div>
-              <dl>
-                <div>
-                  <dt>Duration</dt>
-                  <dd>{{ submission.executionDurationMs }} ms</dd>
-                </div>
-                <div>
-                  <dt>Submitted</dt>
-                  <dd>{{ submission.createdAt }}</dd>
-                </div>
-              </dl>
-              @if (formatMetadata(submission.executionMetadata); as metadata) {
-                <pre class="metadata">{{ metadata }}</pre>
-              }
-            </div>
-          }
-        </section>
-      </section>
-
-      <section class="panel history-panel">
-        <div class="panel-heading">
-          <h2>My submissions</h2>
-          @if (!session.isAuthenticated()) {
-            <a
-              class="login-link"
-              [routerLink]="['/login']"
-              [queryParams]="{ redirectTo: currentUrl() }"
-            >
-              Log in to submit
-            </a>
-          }
-        </div>
-
-        @if (!session.isAuthenticated()) {
-          <app-empty-state
-            title="Submission history is private"
-            message="Log in to submit solutions and review your attempts for this task."
-          />
-        } @else if (historyLoading()) {
-          <app-loading-state label="Loading submissions..." />
-        } @else if (historyError()) {
-          <app-error-state
-            [message]="historyError() ?? 'Could not load submissions.'"
-            (retry)="loadSubmissionHistory(currentTask.id)"
-          />
-        } @else if (submissionsPage(); as submissions) {
-          @if (submissions.content.length === 0) {
-            <app-empty-state
-              title="No submissions yet"
-              message="Your attempts for this task will appear here."
+              (valueChange)="sourceCode.set($event)"
             />
-          } @else {
-            <div class="submission-list">
-              @for (submission of submissions.content; track submission.id) {
-                <button
-                  type="button"
-                  class="submission-row"
-                  (click)="selectedSourceCode.set(submission.sourceCode)"
-                >
+
+            <div class="editor-actions">
+              <button
+                type="button"
+                class="submit-button"
+                [disabled]="submitting()"
+                (click)="submit()"
+              >
+                {{ submitLabel() }}
+              </button>
+            </div>
+
+            @if (submitError()) {
+              <p class="api-error">{{ submitError() }}</p>
+            }
+
+            @if (latestSubmission(); as submission) {
+              <div class="result-panel">
+                <div class="result-heading">
+                  <h3>Latest result</h3>
                   <app-submission-status-badge [status]="submission.status" />
-                  <span>{{ submission.executionDurationMs }} ms</span>
-                  <span>{{ submission.createdAt }}</span>
-                  <span>View source</span>
-                </button>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Duration</dt>
+                    <dd>{{ submission.executionDurationMs }} ms</dd>
+                  </div>
+                  <div>
+                    <dt>Submitted</dt>
+                    <dd>{{ submission.createdAt }}</dd>
+                  </div>
+                </dl>
+                @if (formatMetadata(submission.executionMetadata); as metadata) {
+                  <pre class="metadata">{{ metadata }}</pre>
+                }
+              </div>
+            }
+          </section>
+
+          <section class="panel history-panel">
+            <div class="panel-heading">
+              <h2>My submissions</h2>
+              @if (!session.isAuthenticated()) {
+                <a
+                  class="login-link"
+                  [routerLink]="['/login']"
+                  [queryParams]="{ redirectTo: currentUrl() }"
+                >
+                  Log in to submit
+                </a>
               }
             </div>
-          }
-        }
+
+            @if (!session.isAuthenticated()) {
+              <app-empty-state
+                title="Submission history is private"
+                message="Log in to submit solutions and review your attempts for this task."
+              />
+            } @else if (historyLoading()) {
+              <app-loading-state label="Loading submissions..." />
+            } @else if (historyError()) {
+              <app-error-state
+                [message]="historyError() ?? 'Could not load submissions.'"
+                (retry)="loadSubmissionHistory(currentTask.id)"
+              />
+            } @else if (submissionsPage(); as submissions) {
+              @if (submissions.content.length === 0) {
+                <app-empty-state
+                  title="No submissions yet"
+                  message="Your attempts for this task will appear here."
+                />
+              } @else {
+                <div class="submission-list">
+                  @for (submission of submissions.content; track submission.id) {
+                    <button
+                      type="button"
+                      class="submission-row"
+                      (click)="selectedSourceCode.set(submission.sourceCode)"
+                    >
+                      <app-submission-status-badge [status]="submission.status" />
+                      <span>{{ submission.executionDurationMs }} ms</span>
+                      <span>{{ submission.createdAt }}</span>
+                      <span>View source</span>
+                    </button>
+                  }
+                </div>
+              }
+            }
+          </section>
+        </div>
       </section>
 
       @if (selectedSourceCode(); as source) {
@@ -233,15 +235,14 @@ import { TasksApiService } from './tasks-api.service';
 
     .workspace-grid {
       display: grid;
-      grid-template-columns: minmax(300px, 0.75fr) minmax(720px, 1.35fr);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       gap: 20px;
       align-items: start;
-      width: min(1540px, calc(100vw - 64px));
-      margin-left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
     }
 
     .panel {
+      min-width: 0;
       padding: 20px;
       border: 1px solid #dde2ea;
       border-radius: 8px;
@@ -264,10 +265,16 @@ import { TasksApiService } from './tasks-api.service';
     .test-case {
       display: grid;
       gap: 10px;
+      min-width: 0;
+      overflow: hidden;
       padding: 12px;
       border: 1px solid #edf1f5;
       border-radius: 8px;
       background: #f8fafc;
+    }
+
+    .test-case > div {
+      min-width: 0;
     }
 
     .test-label {
@@ -281,6 +288,7 @@ import { TasksApiService } from './tasks-api.service';
 
     pre {
       overflow: auto;
+      max-width: 100%;
       margin: 0;
       padding: 12px;
       border-radius: 6px;
@@ -296,9 +304,15 @@ import { TasksApiService } from './tasks-api.service';
       gap: 16px;
     }
 
+    .solution-stack {
+      display: grid;
+      gap: 20px;
+      min-width: 0;
+    }
+
     .editor-panel app-code-editor {
       display: block;
-      min-height: 624px;
+      min-height: 320px;
     }
 
     .editor-actions {
@@ -372,7 +386,7 @@ import { TasksApiService } from './tasks-api.service';
     }
 
     .history-panel {
-      margin-top: 20px;
+      min-width: 0;
     }
 
     .submission-list {
@@ -422,9 +436,6 @@ import { TasksApiService } from './tasks-api.service';
 
     @media (max-width: 940px) {
       .workspace-grid {
-        width: auto;
-        margin-left: 0;
-        transform: none;
         grid-template-columns: 1fr;
       }
 
