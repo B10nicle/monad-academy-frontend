@@ -84,20 +84,11 @@ import { TasksApiService } from './tasks-api.service';
             <h2>Solution</h2>
           </div>
 
-          <div class="solution-signature" aria-label="Solution signature">
-            <span class="signature-class">class Solution</span>
-            <span class="signature-brace">{{ '{' }}</span>
-            <span class="signature-method">
-              {{ currentTask.methodReturnType }} {{ currentTask.methodName }}({{
-                currentTask.methodParameters
-              }})
-            </span>
-            <span class="signature-brace">{{ '}' }}</span>
-          </div>
-
           <app-code-editor
             [value]="sourceCode()"
             [disabled]="submitting()"
+            solutionClassLabel="class Solution"
+            [methodSignature]="methodSignature(currentTask)"
             (valueChange)="sourceCode.set($event)"
           />
 
@@ -244,9 +235,12 @@ import { TasksApiService } from './tasks-api.service';
 
     .workspace-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.1fr);
+      grid-template-columns: minmax(300px, 0.75fr) minmax(720px, 1.35fr);
       gap: 20px;
       align-items: start;
+      width: min(1540px, calc(100vw - 64px));
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
 
     .panel {
@@ -306,35 +300,7 @@ import { TasksApiService } from './tasks-api.service';
 
     .editor-panel app-code-editor {
       display: block;
-      min-height: 520px;
-    }
-
-    .solution-signature {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      padding: 12px 14px;
-      border: 1px solid #c9ddf2;
-      border-radius: 8px;
-      background: #f4f9ff;
-      color: #2d3645;
-      font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .signature-class {
-      color: #244a76;
-    }
-
-    .signature-method {
-      color: #116631;
-    }
-
-    .signature-brace {
-      color: #697386;
+      min-height: 624px;
     }
 
     .editor-actions {
@@ -458,6 +424,9 @@ import { TasksApiService } from './tasks-api.service';
 
     @media (max-width: 940px) {
       .workspace-grid {
+        width: auto;
+        margin-left: 0;
+        transform: none;
         grid-template-columns: 1fr;
       }
 
@@ -593,6 +562,10 @@ export class TaskDetailPage {
     }
 
     return this.session.isAuthenticated() ? 'Submit solution' : 'Log in to submit';
+  }
+
+  protected methodSignature(task: PublicTask): string {
+    return `${task.methodReturnType} ${task.methodName}(${task.methodParameters})`;
   }
 
   protected formatMetadata(metadata: string | null | undefined): string | null {

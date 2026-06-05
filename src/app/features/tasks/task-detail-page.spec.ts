@@ -17,6 +17,8 @@ import { TaskDetailPage } from './task-detail-page';
 class CodeEditorStub {
   readonly value = input('');
   readonly disabled = input(false);
+  readonly solutionClassLabel = input('');
+  readonly methodSignature = input('');
   readonly valueChange = output<string>();
 }
 
