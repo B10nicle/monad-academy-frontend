@@ -13,65 +13,22 @@ import type * as Monaco from 'monaco-editor';
 
 @Component({
   selector: 'app-code-editor',
-  template: `
-    <div class="editor-shell">
-      @if (solutionClassLabel() || methodSignature()) {
-        <div class="signature-bar" aria-label="Solution signature">
-          @if (solutionClassLabel()) {
-            <span class="signature-class">{{ solutionClassLabel() }}</span>
-          }
-          @if (methodSignature()) {
-            <span class="signature-method">{{ methodSignature() }}</span>
-          }
-        </div>
-      }
-      <div class="editor-host" #editorHost></div>
-    </div>
-  `,
+  template: `<div class="editor-host" #editorHost></div>`,
   styles: `
-    .editor-shell {
-      width: 100%;
-      overflow: hidden;
-      border: 1px solid #cfd6e1;
-      border-radius: 8px;
-      background: #1e1e1e;
-    }
-
-    .signature-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      min-height: 44px;
-      padding: 10px 14px;
-      border-bottom: 1px solid #343434;
-      background: #1e1e1e;
-      font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .signature-class {
-      color: #7db8ff;
-    }
-
-    .signature-method {
-      color: #7ee2a8;
-    }
-
     .editor-host {
       width: 100%;
       height: 580px;
       min-height: 320px;
+      overflow: hidden;
+      border: 1px solid #cfd6e1;
+      border-radius: 8px;
+      background: #1e1e1e;
     }
   `,
 })
 export class CodeEditor implements AfterViewInit, OnChanges, OnDestroy {
   readonly value = input('');
   readonly disabled = input(false);
-  readonly solutionClassLabel = input('');
-  readonly methodSignature = input('');
   readonly valueChange = output<string>();
 
   @ViewChild('editorHost', { static: true })

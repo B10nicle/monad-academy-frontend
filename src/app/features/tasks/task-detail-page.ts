@@ -87,8 +87,6 @@ import { TasksApiService } from './tasks-api.service';
           <app-code-editor
             [value]="sourceCode()"
             [disabled]="submitting()"
-            solutionClassLabel="class Solution"
-            [methodSignature]="methodSignature(currentTask)"
             (valueChange)="sourceCode.set($event)"
           />
 
@@ -562,10 +560,6 @@ export class TaskDetailPage {
     }
 
     return this.session.isAuthenticated() ? 'Submit solution' : 'Log in to submit';
-  }
-
-  protected methodSignature(task: PublicTask): string {
-    return `${task.methodReturnType} ${task.methodName}(${task.methodParameters})`;
   }
 
   protected formatMetadata(metadata: string | null | undefined): string | null {
