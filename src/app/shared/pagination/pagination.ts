@@ -1,15 +1,20 @@
 import { Component, computed, input, output } from '@angular/core';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 @Component({
   selector: 'app-pagination',
+  imports: [I18nPipe],
   template: `
-    <nav class="pagination" aria-label="Pagination">
+    <nav class="pagination" [attr.aria-label]="'shared.pagination.aria' | t">
       <button type="button" [disabled]="isFirstPage()" (click)="pageChange.emit(page() - 1)">
-        Previous
+        {{ 'shared.pagination.previous' | t }}
       </button>
-      <span>Page {{ page() + 1 }} of {{ totalPagesLabel() }}</span>
+      <span>{{
+        'shared.pagination.page' | t: { page: page() + 1, totalPages: totalPagesLabel() }
+      }}</span>
       <button type="button" [disabled]="isLastPage()" (click)="pageChange.emit(page() + 1)">
-        Next
+        {{ 'shared.pagination.next' | t }}
       </button>
     </nav>
   `,

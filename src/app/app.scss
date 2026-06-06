@@ -51,7 +51,8 @@
 
 .primary-nav a,
 .text-button,
-.primary-button {
+.primary-button,
+.language-toggle {
   min-height: 36px;
   padding: 8px 12px;
   border: 0;
@@ -66,9 +67,16 @@
 
 .primary-nav a:hover,
 .primary-nav a.active,
-.text-button:hover {
+.text-button:hover,
+.language-toggle:hover {
   background: #edf1f5;
   color: #151922;
+}
+
+.language-toggle {
+  min-width: 44px;
+  border: 1px solid #cfd6e1;
+  background: #ffffff;
 }
 
 .primary-button {

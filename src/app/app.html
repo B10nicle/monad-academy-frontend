@@ -1,25 +1,36 @@
 <div class="app-shell">
   <header class="topbar">
-    <a class="brand" routerLink="/tasks" aria-label="Monad Academy tasks">
+    <a class="brand" routerLink="/tasks" [attr.aria-label]="'app.brand.aria' | t">
       <span class="brand-mark">M</span>
       <span class="brand-text">Monad Academy</span>
     </a>
 
-    <nav class="primary-nav" aria-label="Primary navigation">
-      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
-      <a routerLink="/submissions" routerLinkActive="active">My submissions</a>
+    <nav class="primary-nav" [attr.aria-label]="'app.nav.primary' | t">
+      <a routerLink="/tasks" routerLinkActive="active">{{ 'app.nav.tasks' | t }}</a>
+      <a routerLink="/submissions" routerLinkActive="active">{{ 'app.nav.submissions' | t }}</a>
       @if (session.isAdmin()) {
-        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        <a routerLink="/admin" routerLinkActive="active">{{ 'app.nav.admin' | t }}</a>
       }
     </nav>
 
     <div class="account">
+      <button
+        type="button"
+        class="language-toggle"
+        [attr.aria-label]="'app.language.label' | t"
+        (click)="toggleLanguage()"
+      >
+        {{ i18n.locale() === 'en' ? ('app.language.ru' | t) : ('app.language.en' | t) }}
+      </button>
+
       @if (session.currentUser(); as user) {
         <span class="user-chip">{{ user.username }}</span>
-        <button type="button" class="text-button" (click)="logout()">Log out</button>
+        <button type="button" class="text-button" (click)="logout()">
+          {{ 'app.account.logout' | t }}
+        </button>
       } @else {
-        <a class="text-button" routerLink="/login">Log in</a>
-        <a class="primary-button" routerLink="/register">Register</a>
+        <a class="text-button" routerLink="/login">{{ 'app.account.login' | t }}</a>
+        <a class="primary-button" routerLink="/register">{{ 'app.account.register' | t }}</a>
       }
     </div>
   </header>

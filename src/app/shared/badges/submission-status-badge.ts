@@ -1,5 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 export type SubmissionStatus =
   | 'PENDING'
   | 'RUNNING'
@@ -12,6 +14,7 @@ export type SubmissionStatus =
 
 @Component({
   selector: 'app-submission-status-badge',
+  imports: [I18nPipe],
   template: `
     <span
       class="badge"
@@ -20,7 +23,7 @@ export type SubmissionStatus =
       [class.running]="statusClass() === 'running'"
       [class.failed]="statusClass() === 'failed'"
     >
-      {{ status() }}
+      {{ 'enum.submissionStatus.' + status() | t }}
     </span>
   `,
   styles: `

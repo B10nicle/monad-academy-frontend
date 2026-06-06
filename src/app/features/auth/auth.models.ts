@@ -22,5 +22,6 @@ export interface AuthResponse {
 }
 
 export interface MessageResponse {
+  code?: 'REGISTRATION_COMPLETED' | 'EMAIL_VERIFIED' | 'VERIFICATION_INSTRUCTIONS_SENT';
   message: string;
 }

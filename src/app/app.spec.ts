@@ -7,6 +7,8 @@ import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
@@ -33,5 +35,18 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.brand-text')?.textContent).toContain('Monad Academy');
     expect(compiled.querySelector('nav')?.textContent).toContain('Tasks');
+  });
+
+  it('should switch language from the topbar and persist selection', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    compiled.querySelector<HTMLButtonElement>('.language-toggle')?.click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('nav')?.textContent).toContain('Задачи');
+    expect(localStorage.getItem('monad-academy.locale')).toBe('ru');
   });
 });

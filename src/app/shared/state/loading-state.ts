@@ -1,8 +1,11 @@
 import { Component, input } from '@angular/core';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 @Component({
   selector: 'app-loading-state',
-  template: `<div class="state" role="status">{{ label() }}</div>`,
+  imports: [I18nPipe],
+  template: `<div class="state" role="status">{{ label() | t }}</div>`,
   styles: `
     .state {
       padding: 24px;
@@ -15,5 +18,5 @@ import { Component, input } from '@angular/core';
   `,
 })
 export class LoadingState {
-  readonly label = input('Loading...');
+  readonly label = input('shared.loading');
 }

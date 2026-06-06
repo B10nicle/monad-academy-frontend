@@ -1,23 +1,25 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 @Component({
   selector: 'app-admin-page',
-  imports: [RouterLink],
+  imports: [I18nPipe, RouterLink],
   template: `
     <section class="page-header">
-      <p class="eyebrow">Admin</p>
-      <h1>Administration</h1>
+      <p class="eyebrow">{{ 'admin.eyebrow' | t }}</p>
+      <h1>{{ 'admin.title' | t }}</h1>
     </section>
 
     <section class="admin-actions">
       <a routerLink="/admin/tasks/new">
-        <span>Task authoring</span>
-        <strong>Create a task</strong>
+        <span>{{ 'admin.taskAuthoring' | t }}</span>
+        <strong>{{ 'admin.createTask' | t }}</strong>
       </a>
       <a routerLink="/admin/submissions">
-        <span>Submission review</span>
-        <strong>Inspect submissions</strong>
+        <span>{{ 'admin.submissionReview' | t }}</span>
+        <strong>{{ 'admin.inspectSubmissions' | t }}</strong>
       </a>
     </section>
   `,

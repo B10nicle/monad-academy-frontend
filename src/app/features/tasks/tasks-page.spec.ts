@@ -60,8 +60,8 @@ describe('TasksPage', () => {
 
     expect(tasksApi.listTasks).toHaveBeenCalledWith({ page: 0, size: 20 });
     expect(compiled.textContent).toContain('Stream filter');
-    expect(compiled.textContent).toContain('EASY');
-    expect(compiled.textContent).toContain('STREAM API');
+    expect(compiled.textContent).toContain('Easy');
+    expect(compiled.textContent).toContain('Stream API');
   });
 
   it('should navigate when page changes', () => {

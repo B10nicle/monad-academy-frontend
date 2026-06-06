@@ -1,9 +1,12 @@
 import { Component, input } from '@angular/core';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 export type TaskDifficulty = 'EASY' | 'MEDIUM' | 'HARD';
 
 @Component({
   selector: 'app-difficulty-badge',
+  imports: [I18nPipe],
   template: `
     <span
       class="badge"
@@ -11,7 +14,7 @@ export type TaskDifficulty = 'EASY' | 'MEDIUM' | 'HARD';
       [class.medium]="difficulty() === 'MEDIUM'"
       [class.hard]="difficulty() === 'HARD'"
     >
-      {{ difficulty() }}
+      {{ 'enum.difficulty.' + difficulty() | t }}
     </span>
   `,
   styles: `
