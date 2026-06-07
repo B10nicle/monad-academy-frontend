@@ -43,9 +43,14 @@ describe('App', () => {
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    compiled.querySelector<HTMLButtonElement>('.language-toggle')?.click();
+    const toggle = compiled.querySelector<HTMLButtonElement>('.language-toggle');
+
+    expect(toggle?.textContent?.trim()).toBe('EN');
+
+    toggle?.click();
     fixture.detectChanges();
 
+    expect(toggle?.textContent?.trim()).toBe('RU');
     expect(compiled.querySelector('nav')?.textContent).toContain('Задачи');
     expect(localStorage.getItem('monad-academy.locale')).toBe('ru');
   });

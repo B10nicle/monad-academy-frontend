@@ -20,7 +20,7 @@
         [attr.aria-label]="'app.language.label' | t"
         (click)="toggleLanguage()"
       >
-        {{ i18n.locale() === 'en' ? ('app.language.ru' | t) : ('app.language.en' | t) }}
+        {{ i18n.locale() === 'en' ? ('app.language.en' | t) : ('app.language.ru' | t) }}
       </button>
 
       @if (session.currentUser(); as user) {
