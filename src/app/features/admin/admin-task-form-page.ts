@@ -3,6 +3,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { ApiError } from '../../core/api/api-error';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { DifficultyBadge } from '../../shared/badges/difficulty-badge';
 import { TopicBadge } from '../../shared/badges/topic-badge';
 import { EmptyState } from '../../shared/state/empty-state';
@@ -16,98 +18,98 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
 
 @Component({
   selector: 'app-admin-task-form-page',
-  imports: [DifficultyBadge, EmptyState, ReactiveFormsModule, RouterLink, TopicBadge],
+  imports: [DifficultyBadge, EmptyState, I18nPipe, ReactiveFormsModule, RouterLink, TopicBadge],
   template: `
     <section class="page-header">
       <div>
-        <p class="eyebrow">Admin task</p>
-        <h1>Task authoring</h1>
+        <p class="eyebrow">{{ 'admin.task.eyebrow' | t }}</p>
+        <h1>{{ 'admin.task.title' | t }}</h1>
       </div>
-      <a class="secondary-link" routerLink="/admin">Admin home</a>
+      <a class="secondary-link" routerLink="/admin">{{ 'admin.home' | t }}</a>
     </section>
 
     <section class="editor-grid">
       <form class="panel task-form" [formGroup]="taskForm" (ngSubmit)="saveTask()">
         <div class="panel-heading">
-          <h2>{{ createdTask() ? 'Update task' : 'Create task' }}</h2>
+          <h2>{{ createdTask() ? ('admin.task.update' | t) : ('admin.task.create' | t) }}</h2>
           @if (createdTask(); as task) {
             <div class="badges">
               <app-difficulty-badge [difficulty]="task.difficulty" />
               <app-topic-badge [topic]="task.topic" />
-              <span class="status-pill">{{ task.status }}</span>
+              <span class="status-pill">{{ 'enum.taskStatus.' + task.status | t }}</span>
             </div>
           }
         </div>
 
         <div class="field two-columns">
           <label>
-            Title
+            {{ 'admin.task.field.title' | t }}
             <input type="text" formControlName="title" />
           </label>
           <label>
-            Slug
+            {{ 'admin.task.field.slug' | t }}
             <input type="text" formControlName="slug" />
           </label>
         </div>
 
         <div class="field three-columns">
           <label>
-            Difficulty
+            {{ 'admin.task.field.difficulty' | t }}
             <select formControlName="difficulty">
-              <option value="EASY">EASY</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="HARD">HARD</option>
+              <option value="EASY">{{ 'enum.difficulty.EASY' | t }}</option>
+              <option value="MEDIUM">{{ 'enum.difficulty.MEDIUM' | t }}</option>
+              <option value="HARD">{{ 'enum.difficulty.HARD' | t }}</option>
             </select>
           </label>
           <label>
-            Topic
+            {{ 'admin.task.field.topic' | t }}
             <select formControlName="topic">
-              <option value="STREAM_API">STREAM_API</option>
+              <option value="STREAM_API">{{ 'enum.topic.STREAM_API' | t }}</option>
             </select>
           </label>
           <label>
-            Status
+            {{ 'admin.task.field.status' | t }}
             <select formControlName="status">
-              <option value="DRAFT">DRAFT</option>
-              <option value="PUBLISHED">PUBLISHED</option>
-              <option value="ARCHIVED">ARCHIVED</option>
+              <option value="DRAFT">{{ 'enum.taskStatus.DRAFT' | t }}</option>
+              <option value="PUBLISHED">{{ 'enum.taskStatus.PUBLISHED' | t }}</option>
+              <option value="ARCHIVED">{{ 'enum.taskStatus.ARCHIVED' | t }}</option>
             </select>
           </label>
         </div>
 
         <label class="field">
-          Description
+          {{ 'admin.task.field.description' | t }}
           <textarea rows="8" formControlName="description"></textarea>
         </label>
 
-        <section class="method-panel" aria-label="Solution method signature">
+        <section class="method-panel" [attr.aria-label]="'admin.task.method.aria' | t">
           <div class="method-heading">
-            <h3>Solution method</h3>
-            <p>Must match the method declared in both code templates.</p>
+            <h3>{{ 'admin.task.method.title' | t }}</h3>
+            <p>{{ 'admin.task.method.help' | t }}</p>
           </div>
           <div class="field three-columns">
             <label>
-              Method name
+              {{ 'admin.task.method.name' | t }}
               <input type="text" formControlName="methodName" placeholder="mapValues" />
             </label>
             <label>
-              Return type
+              {{ 'admin.task.method.returnType' | t }}
               <input type="text" formControlName="methodReturnType" placeholder="String" />
             </label>
             <label>
-              Parameters
+              {{ 'admin.task.method.parameters' | t }}
               <input type="text" formControlName="methodParameters" placeholder="String input" />
             </label>
           </div>
         </section>
 
         <label class="field">
-          Initial code
+          {{ 'admin.task.initialCode' | t }}
           <textarea rows="10" formControlName="initialCode"></textarea>
         </label>
 
         <label class="field">
-          Solution template
+          {{ 'admin.task.solutionTemplate' | t }}
           <textarea rows="10" formControlName="solutionTemplate"></textarea>
         </label>
 
@@ -120,58 +122,65 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
 
         <div class="actions">
           <button type="submit" [disabled]="taskForm.invalid || taskSaving()">
-            {{ taskSaving() ? 'Saving...' : createdTask() ? 'Update task' : 'Create task' }}
+            {{
+              taskSaving()
+                ? ('admin.task.saving' | t)
+                : createdTask()
+                  ? ('admin.task.update' | t)
+                  : ('admin.task.create' | t)
+            }}
           </button>
           <button
             type="button"
             [disabled]="!createdTask() || lifecycleSaving()"
             (click)="publishTask()"
           >
-            Publish
+            {{ 'admin.task.publish' | t }}
           </button>
           <button
             type="button"
             [disabled]="!createdTask() || lifecycleSaving()"
             (click)="archiveTask()"
           >
-            Archive
+            {{ 'admin.task.archive' | t }}
           </button>
         </div>
       </form>
 
       <section class="panel test-panel">
         <div class="panel-heading">
-          <h2>Test cases</h2>
+          <h2>{{ 'admin.task.testCases' | t }}</h2>
           @if (createdTask(); as task) {
-            <span class="status-pill"
-              >{{ task.testCases.length + createdTestCases().length }} total</span
-            >
+            <span class="status-pill">{{
+              'admin.task.testCasesCount'
+                | t: { count: task.testCases.length + createdTestCases().length }
+            }}</span>
           }
         </div>
 
         @if (!createdTask()) {
           <app-empty-state
-            title="Create the task first"
-            message="Test cases can be added after the backend returns a task id."
+            title="admin.task.createFirstTitle"
+            message="admin.task.createFirstMessage"
           />
         } @else {
           <form class="test-form" [formGroup]="testCaseForm" (ngSubmit)="addTestCase()">
             <label class="field">
-              Input
+              {{ 'admin.task.input' | t }}
               <textarea rows="5" formControlName="input"></textarea>
             </label>
             <label class="field">
-              Expected output
+              {{ 'admin.task.expectedOutput' | t }}
               <textarea rows="5" formControlName="expectedOutput"></textarea>
             </label>
             <div class="field two-columns">
               <label>
-                Order index
+                {{ 'admin.task.orderIndex' | t }}
                 <input type="number" formControlName="orderIndex" />
               </label>
               <label class="checkbox-label">
                 <input type="checkbox" formControlName="hidden" />
-                Hidden
+                {{ 'admin.task.hidden' | t }}
               </label>
             </div>
 
@@ -183,21 +192,25 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
             }
 
             <button type="submit" [disabled]="testCaseForm.invalid || testCaseSaving()">
-              {{ testCaseSaving() ? 'Adding...' : 'Add test case' }}
+              {{ testCaseSaving() ? ('admin.task.adding' | t) : ('admin.task.addTestCase' | t) }}
             </button>
           </form>
 
           @if (allTestCases().length === 0) {
             <app-empty-state
-              title="No test cases yet"
-              message="Added test cases will appear here."
+              title="admin.task.noTestCasesTitle"
+              message="admin.task.noTestCasesMessage"
             />
           } @else {
             <div class="test-list">
               @for (testCase of allTestCases(); track testCase.id) {
                 <div class="test-case">
                   <span>#{{ testCase.orderIndex }}</span>
-                  <span>{{ testCase.hidden ? 'hidden' : 'public' }}</span>
+                  <span>{{
+                    testCase.hidden
+                      ? ('admin.task.visibility.hidden' | t)
+                      : ('admin.task.visibility.public' | t)
+                  }}</span>
                   <pre>{{ testCase.input }}</pre>
                   <pre>{{ testCase.expectedOutput }}</pre>
                 </div>
@@ -423,6 +436,7 @@ import { AdminTasksApiService } from './admin-tasks-api.service';
 export class AdminTaskFormPage {
   private readonly adminTasksApi = inject(AdminTasksApiService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18n = inject(I18nService);
 
   protected readonly createdTask = signal<TaskResponse | null>(null);
   protected readonly createdTestCases = signal<TaskTestCaseResponse[]>([]);
@@ -481,11 +495,13 @@ export class AdminTaskFormPage {
       next: (task) => {
         this.createdTask.set(task);
         this.patchTaskForm(task);
-        this.taskMessage.set(currentTask ? 'Task updated.' : 'Task created.');
+        this.taskMessage.set(
+          this.i18n.translate(currentTask ? 'admin.task.updated' : 'admin.task.created'),
+        );
         this.taskSaving.set(false);
       },
       error: (error: ApiError) => {
-        this.taskError.set(error.message);
+        this.taskError.set(this.i18n.translateApiError(error, 'api.error.generic'));
         this.taskSaving.set(false);
       },
     });
@@ -506,7 +522,7 @@ export class AdminTaskFormPage {
     this.adminTasksApi.addTestCase(task.id, this.testCaseRequest()).subscribe({
       next: (testCase) => {
         this.createdTestCases.update((testCases) => [...testCases, testCase]);
-        this.testCaseMessage.set('Test case added.');
+        this.testCaseMessage.set(this.i18n.translate('admin.task.testCaseAdded'));
         this.testCaseForm.reset({
           input: '',
           expectedOutput: '',
@@ -516,7 +532,7 @@ export class AdminTaskFormPage {
         this.testCaseSaving.set(false);
       },
       error: (error: ApiError) => {
-        this.testCaseError.set(error.message);
+        this.testCaseError.set(this.i18n.translateApiError(error, 'api.error.generic'));
         this.testCaseSaving.set(false);
       },
     });
@@ -549,11 +565,15 @@ export class AdminTaskFormPage {
       next: (updatedTask) => {
         this.createdTask.set(updatedTask);
         this.patchTaskForm(updatedTask);
-        this.taskMessage.set(action === 'publish' ? 'Task published.' : 'Task archived.');
+        this.taskMessage.set(
+          this.i18n.translate(
+            action === 'publish' ? 'admin.task.published' : 'admin.task.archived',
+          ),
+        );
         this.lifecycleSaving.set(false);
       },
       error: (error: ApiError) => {
-        this.taskError.set(error.message);
+        this.taskError.set(this.i18n.translateApiError(error, 'api.error.generic'));
         this.lifecycleSaving.set(false);
       },
     });

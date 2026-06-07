@@ -6,6 +6,8 @@ import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { ApiError } from '../../core/api/api-error';
 import { PageResponse } from '../../core/api/page-response';
 import { SessionService } from '../../core/auth/session.service';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { Submission, SubmissionRequest } from '../submissions/submission.models';
 import { SubmissionsApiService } from '../submissions/submissions-api.service';
 import { DifficultyBadge } from '../../shared/badges/difficulty-badge';
@@ -25,6 +27,7 @@ import { TasksApiService } from './tasks-api.service';
     DifficultyBadge,
     EmptyState,
     ErrorState,
+    I18nPipe,
     LoadingState,
     RouterLink,
     SubmissionStatusBadge,
@@ -32,16 +35,16 @@ import { TasksApiService } from './tasks-api.service';
   ],
   template: `
     @if (loading()) {
-      <app-loading-state label="Loading task..." />
+      <app-loading-state label="tasks.detail.loading" />
     } @else if (errorMessage()) {
       <app-error-state
-        [message]="errorMessage() ?? 'Could not load task.'"
+        [message]="errorMessage() ?? ('tasks.detail.loadError' | t)"
         (retry)="reloadTask()"
       />
     } @else if (task(); as currentTask) {
       <section class="workspace-header">
         <div>
-          <a class="back-link" routerLink="/tasks">Back to catalog</a>
+          <a class="back-link" routerLink="/tasks">{{ 'tasks.detail.backToCatalog' | t }}</a>
           <h1>{{ currentTask.title }}</h1>
           <div class="badges">
             <app-difficulty-badge [difficulty]="currentTask.difficulty" />
@@ -52,25 +55,25 @@ import { TasksApiService } from './tasks-api.service';
 
       <section class="workspace-grid">
         <article class="panel problem-panel">
-          <h2>Problem</h2>
+          <h2>{{ 'tasks.detail.problem' | t }}</h2>
           <div class="problem-text">{{ currentTask.description }}</div>
 
-          <h3>Public tests</h3>
+          <h3>{{ 'tasks.detail.publicTests' | t }}</h3>
           @if (currentTask.testCases.length === 0) {
             <app-empty-state
-              title="No public test cases"
-              message="This task does not expose sample tests yet."
+              title="tasks.detail.noPublicTestsTitle"
+              message="tasks.detail.noPublicTestsMessage"
             />
           } @else {
             <div class="test-list">
               @for (testCase of currentTask.testCases; track testCase.id) {
                 <div class="test-case">
                   <div>
-                    <span class="test-label">Input</span>
+                    <span class="test-label">{{ 'tasks.detail.input' | t }}</span>
                     <pre>{{ testCase.input }}</pre>
                   </div>
                   <div>
-                    <span class="test-label">Expected</span>
+                    <span class="test-label">{{ 'tasks.detail.expected' | t }}</span>
                     <pre>{{ testCase.expectedOutput }}</pre>
                   </div>
                 </div>
@@ -82,7 +85,7 @@ import { TasksApiService } from './tasks-api.service';
         <div class="solution-stack">
           <section class="panel editor-panel">
             <div class="panel-heading">
-              <h2>Solution</h2>
+              <h2>{{ 'tasks.detail.solution' | t }}</h2>
             </div>
 
             <app-code-editor
@@ -109,16 +112,16 @@ import { TasksApiService } from './tasks-api.service';
             @if (latestSubmission(); as submission) {
               <div class="result-panel">
                 <div class="result-heading">
-                  <h3>Latest result</h3>
+                  <h3>{{ 'tasks.detail.latestResult' | t }}</h3>
                   <app-submission-status-badge [status]="submission.status" />
                 </div>
                 <dl>
                   <div>
-                    <dt>Duration</dt>
+                    <dt>{{ 'tasks.detail.duration' | t }}</dt>
                     <dd>{{ submission.executionDurationMs }} ms</dd>
                   </div>
                   <div>
-                    <dt>Submitted</dt>
+                    <dt>{{ 'tasks.detail.submitted' | t }}</dt>
                     <dd>{{ submission.createdAt }}</dd>
                   </div>
                 </dl>
@@ -131,35 +134,35 @@ import { TasksApiService } from './tasks-api.service';
 
           <section class="panel history-panel">
             <div class="panel-heading">
-              <h2>My submissions</h2>
+              <h2>{{ 'tasks.detail.mySubmissions' | t }}</h2>
               @if (!session.isAuthenticated()) {
                 <a
                   class="login-link"
                   [routerLink]="['/login']"
                   [queryParams]="{ redirectTo: currentUrl() }"
                 >
-                  Log in to submit
+                  {{ 'tasks.detail.loginToSubmit' | t }}
                 </a>
               }
             </div>
 
             @if (!session.isAuthenticated()) {
               <app-empty-state
-                title="Submission history is private"
-                message="Log in to submit solutions and review your attempts for this task."
+                title="tasks.detail.historyPrivateTitle"
+                message="tasks.detail.historyPrivateMessage"
               />
             } @else if (historyLoading()) {
-              <app-loading-state label="Loading submissions..." />
+              <app-loading-state label="tasks.detail.submissionsLoading" />
             } @else if (historyError()) {
               <app-error-state
-                [message]="historyError() ?? 'Could not load submissions.'"
+                [message]="historyError() ?? ('tasks.detail.submissionsLoadError' | t)"
                 (retry)="loadSubmissionHistory(currentTask.id)"
               />
             } @else if (submissionsPage(); as submissions) {
               @if (submissions.content.length === 0) {
                 <app-empty-state
-                  title="No submissions yet"
-                  message="Your attempts for this task will appear here."
+                  title="tasks.detail.noSubmissionsTitle"
+                  message="tasks.detail.noSubmissionsMessage"
                 />
               } @else {
                 <div class="submission-list">
@@ -172,7 +175,7 @@ import { TasksApiService } from './tasks-api.service';
                       <app-submission-status-badge [status]="submission.status" />
                       <span>{{ submission.executionDurationMs }} ms</span>
                       <span>{{ submission.createdAt }}</span>
-                      <span>View source</span>
+                      <span>{{ 'tasks.detail.viewSource' | t }}</span>
                     </button>
                   }
                 </div>
@@ -183,12 +186,16 @@ import { TasksApiService } from './tasks-api.service';
       </section>
 
       @if (selectedSourceCode(); as source) {
-        <div class="source-preview" role="dialog" aria-label="Submitted source code">
+        <div
+          class="source-preview"
+          role="dialog"
+          [attr.aria-label]="'tasks.detail.sourceDialogAria' | t"
+        >
           <div class="source-preview-card">
             <div class="panel-heading">
-              <h2>Submitted source</h2>
+              <h2>{{ 'tasks.detail.submittedSource' | t }}</h2>
               <button type="button" class="secondary-button" (click)="selectedSourceCode.set(null)">
-                Close
+                {{ 'tasks.detail.close' | t }}
               </button>
             </div>
             <pre>{{ source }}</pre>
@@ -449,6 +456,7 @@ export class TaskDetailPage {
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly i18n = inject(I18nService);
   private readonly submissionsApi = inject(SubmissionsApiService);
   private readonly tasksApi = inject(TasksApiService);
 
@@ -478,7 +486,7 @@ export class TaskDetailPage {
         switchMap((slug) =>
           this.tasksApi.getTask(slug).pipe(
             catchError((error: ApiError) => {
-              this.errorMessage.set(error.message);
+              this.errorMessage.set(this.i18n.translateApiError(error, 'tasks.detail.loadError'));
               return of(null);
             }),
           ),
@@ -532,7 +540,7 @@ export class TaskDetailPage {
         this.loadSubmissionHistory(task.id);
       },
       error: (error: ApiError) => {
-        this.submitError.set(error.message);
+        this.submitError.set(this.i18n.translateApiError(error, 'api.error.generic'));
         this.submitting.set(false);
       },
     });
@@ -548,7 +556,9 @@ export class TaskDetailPage {
         this.historyLoading.set(false);
       },
       error: (error: ApiError) => {
-        this.historyError.set(error.message);
+        this.historyError.set(
+          this.i18n.translateApiError(error, 'tasks.detail.submissionsLoadError'),
+        );
         this.historyLoading.set(false);
       },
     });
@@ -567,10 +577,12 @@ export class TaskDetailPage {
 
   protected submitLabel(): string {
     if (this.submitting()) {
-      return 'Submitting...';
+      return this.i18n.translate('tasks.detail.submitting');
     }
 
-    return this.session.isAuthenticated() ? 'Submit solution' : 'Log in to submit';
+    return this.session.isAuthenticated()
+      ? this.i18n.translate('tasks.detail.submit')
+      : this.i18n.translate('tasks.detail.loginToSubmit');
   }
 
   protected formatMetadata(metadata: string | null | undefined): string | null {

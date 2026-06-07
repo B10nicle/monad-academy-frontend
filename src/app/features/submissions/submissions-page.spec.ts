@@ -65,7 +65,7 @@ describe('SubmissionsPage', () => {
       page: 0,
       size: 20,
     });
-    expect(compiled.textContent).toContain('ACCEPTED');
+    expect(compiled.textContent).toContain('Accepted');
     expect(compiled.textContent).toContain('1');
     expect(compiled.textContent).toContain('42 ms');
   });

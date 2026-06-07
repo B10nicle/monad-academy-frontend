@@ -1,10 +1,13 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
+
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
 
 export type TaskTopic = 'STREAM_API';
 
 @Component({
   selector: 'app-topic-badge',
-  template: `<span class="badge">{{ topicLabel() }}</span>`,
+  imports: [I18nPipe],
+  template: `<span class="badge">{{ 'enum.topic.' + topic() | t }}</span>`,
   styles: `
     .badge {
       display: inline-flex;
@@ -22,11 +25,4 @@ export type TaskTopic = 'STREAM_API';
 })
 export class TopicBadge {
   readonly topic = input.required<TaskTopic>();
-
-  protected readonly topicLabel = computed(() => {
-    switch (this.topic()) {
-      case 'STREAM_API':
-        return 'STREAM API';
-    }
-  });
 }

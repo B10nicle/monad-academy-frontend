@@ -1,21 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { EmptyState } from '../../shared/state/empty-state';
 
 @Component({
   selector: 'app-admin-task-edit-limited-page',
-  imports: [EmptyState, RouterLink],
+  imports: [EmptyState, I18nPipe, RouterLink],
   template: `
     <section class="page-header">
       <div>
-        <p class="eyebrow">Admin task</p>
-        <h1>Edit task</h1>
+        <p class="eyebrow">{{ 'admin.task.eyebrow' | t }}</p>
+        <h1>{{ 'admin.edit.title' | t }}</h1>
       </div>
-      <a routerLink="/admin/tasks/new">Create task</a>
+      <a routerLink="/admin/tasks/new">{{ 'admin.edit.createTask' | t }}</a>
     </section>
 
-    <app-empty-state title="Direct task editing needs backend support" [message]="message" />
+    <app-empty-state title="admin.edit.emptyTitle" [message]="message()" />
   `,
   styles: `
     .page-header {
@@ -53,5 +55,11 @@ import { EmptyState } from '../../shared/state/empty-state';
 })
 export class AdminTaskEditLimitedPage {
   private readonly route = inject(ActivatedRoute);
-  protected readonly message = `Task ${this.route.snapshot.paramMap.get('id') ?? ''} cannot be loaded because the backend does not expose GET /api/admin/tasks/{id} yet.`;
+  private readonly i18n = inject(I18nService);
+
+  protected readonly message = computed(() => {
+    return this.i18n.translate('admin.edit.emptyMessage', {
+      id: this.route.snapshot.paramMap.get('id') ?? '',
+    });
+  });
 }

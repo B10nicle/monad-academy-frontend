@@ -5,6 +5,8 @@ import { catchError, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs'
 
 import { ApiError } from '../../core/api/api-error';
 import { PageResponse } from '../../core/api/page-response';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { SubmissionStatusBadge } from '../../shared/badges/submission-status-badge';
 import { Pagination } from '../../shared/pagination/pagination';
 import { EmptyState } from '../../shared/state/empty-state';
@@ -20,41 +22,40 @@ interface HistoryQuery {
 
 @Component({
   selector: 'app-submissions-page',
-  imports: [EmptyState, ErrorState, LoadingState, Pagination, SubmissionStatusBadge],
+  imports: [EmptyState, ErrorState, I18nPipe, LoadingState, Pagination, SubmissionStatusBadge],
   template: `
     <section class="page-header">
       <div>
-        <p class="eyebrow">History</p>
-        <h1>My submissions</h1>
+        <p class="eyebrow">{{ 'submissions.eyebrow' | t }}</p>
+        <h1>{{ 'submissions.title' | t }}</h1>
       </div>
 
       @if (submissionsPage(); as page) {
-        <div class="history-count">{{ page.totalElements }} submissions</div>
+        <div class="history-count">
+          {{ 'submissions.count' | t: { count: page.totalElements } }}
+        </div>
       }
     </section>
 
     @if (loading()) {
-      <app-loading-state label="Loading submissions..." />
+      <app-loading-state label="submissions.loading" />
     } @else if (errorMessage()) {
       <app-error-state
-        [message]="errorMessage() ?? 'Could not load submissions.'"
+        [message]="errorMessage() ?? ('submissions.loadError' | t)"
         (retry)="reload()"
       />
     } @else if (submissionsPage(); as page) {
       @if (page.content.length === 0) {
-        <app-empty-state
-          title="No submissions yet"
-          message="Your submitted solutions will appear here."
-        />
+        <app-empty-state title="submissions.emptyTitle" message="submissions.emptyMessage" />
       } @else {
-        <section class="history-table" aria-label="Submission history">
+        <section class="history-table" [attr.aria-label]="'submissions.tableAria' | t">
           <div class="history-row history-row-header">
-            <span>Status</span>
-            <span>Task</span>
-            <span>Duration</span>
-            <span>Created</span>
-            <span>Updated</span>
-            <span>Actions</span>
+            <span>{{ 'submissions.column.status' | t }}</span>
+            <span>{{ 'submissions.column.task' | t }}</span>
+            <span>{{ 'submissions.column.duration' | t }}</span>
+            <span>{{ 'submissions.column.created' | t }}</span>
+            <span>{{ 'submissions.column.updated' | t }}</span>
+            <span>{{ 'submissions.column.actions' | t }}</span>
           </div>
 
           @for (submission of page.content; track submission.id) {
@@ -66,10 +67,10 @@ interface HistoryQuery {
               <span>{{ submission.updatedAt }}</span>
               <span class="actions">
                 <button type="button" (click)="selectedSourceCode.set(submission.sourceCode)">
-                  Source
+                  {{ 'submissions.action.source' | t }}
                 </button>
                 <button type="button" (click)="selectedMetadata.set(submission.executionMetadata)">
-                  Metadata
+                  {{ 'submissions.action.metadata' | t }}
                 </button>
               </span>
             </div>
@@ -85,11 +86,17 @@ interface HistoryQuery {
     }
 
     @if (selectedSourceCode(); as sourceCode) {
-      <div class="preview-backdrop" role="dialog" aria-label="Submitted source code">
+      <div
+        class="preview-backdrop"
+        role="dialog"
+        [attr.aria-label]="'submissions.sourceDialogAria' | t"
+      >
         <div class="preview-card">
           <div class="preview-heading">
-            <h2>Submitted source</h2>
-            <button type="button" (click)="selectedSourceCode.set(null)">Close</button>
+            <h2>{{ 'submissions.submittedSource' | t }}</h2>
+            <button type="button" (click)="selectedSourceCode.set(null)">
+              {{ 'tasks.detail.close' | t }}
+            </button>
           </div>
           <pre>{{ sourceCode }}</pre>
         </div>
@@ -97,18 +104,24 @@ interface HistoryQuery {
     }
 
     @if (selectedMetadata() !== null) {
-      <div class="preview-backdrop" role="dialog" aria-label="Execution metadata">
+      <div
+        class="preview-backdrop"
+        role="dialog"
+        [attr.aria-label]="'submissions.metadataDialogAria' | t"
+      >
         <div class="preview-card">
           <div class="preview-heading">
-            <h2>Execution metadata</h2>
-            <button type="button" (click)="selectedMetadata.set(null)">Close</button>
+            <h2>{{ 'submissions.executionMetadata' | t }}</h2>
+            <button type="button" (click)="selectedMetadata.set(null)">
+              {{ 'tasks.detail.close' | t }}
+            </button>
           </div>
           @if (formatMetadata(selectedMetadata()); as metadata) {
             <pre>{{ metadata }}</pre>
           } @else {
             <app-empty-state
-              title="No execution metadata"
-              message="This submission does not include execution metadata."
+              title="submissions.noMetadataTitle"
+              message="submissions.noMetadataMessage"
             />
           }
         </div>
@@ -162,10 +175,9 @@ interface HistoryQuery {
 
     .history-row {
       display: grid;
-      grid-template-columns: 160px minmax(180px, 1fr) 100px minmax(180px, 1fr) minmax(
-          180px,
-          1fr
-        ) 170px;
+      grid-template-columns:
+        160px minmax(180px, 1fr) 100px minmax(180px, 1fr) minmax(180px, 1fr)
+        170px;
       gap: 12px;
       align-items: center;
       min-height: 58px;
@@ -277,6 +289,7 @@ interface HistoryQuery {
 })
 export class SubmissionsPage {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly submissionsApi = inject(SubmissionsApiService);
@@ -303,7 +316,7 @@ export class SubmissionsPage {
         switchMap((query) =>
           this.submissionsApi.listCurrentUserSubmissions(query).pipe(
             catchError((error: ApiError) => {
-              this.errorMessage.set(error.message);
+              this.errorMessage.set(this.i18n.translateApiError(error, 'submissions.loadError'));
               return of(null);
             }),
           ),
@@ -340,7 +353,7 @@ export class SubmissionsPage {
         this.loading.set(false);
       },
       error: (error: ApiError) => {
-        this.errorMessage.set(error.message);
+        this.errorMessage.set(this.i18n.translateApiError(error, 'submissions.loadError'));
         this.loading.set(false);
       },
     });

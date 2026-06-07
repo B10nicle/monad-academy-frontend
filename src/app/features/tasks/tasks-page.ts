@@ -5,6 +5,8 @@ import { catchError, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs'
 
 import { ApiError } from '../../core/api/api-error';
 import { PageResponse } from '../../core/api/page-response';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { DifficultyBadge } from '../../shared/badges/difficulty-badge';
 import { TopicBadge } from '../../shared/badges/topic-badge';
 import { Pagination } from '../../shared/pagination/pagination';
@@ -25,6 +27,7 @@ interface CatalogQuery {
     DifficultyBadge,
     EmptyState,
     ErrorState,
+    I18nPipe,
     LoadingState,
     Pagination,
     RouterLink,
@@ -33,31 +36,33 @@ interface CatalogQuery {
   template: `
     <section class="page-header">
       <div>
-        <p class="eyebrow">Task catalog</p>
-        <h1>Practice Java tasks</h1>
+        <p class="eyebrow">{{ 'tasks.catalog.eyebrow' | t }}</p>
+        <h1>{{ 'tasks.catalog.title' | t }}</h1>
       </div>
 
       @if (tasksPage(); as page) {
-        <div class="catalog-count">{{ page.totalElements }} tasks</div>
+        <div class="catalog-count">
+          {{ 'tasks.catalog.count' | t: { count: page.totalElements } }}
+        </div>
       }
     </section>
 
     @if (loading()) {
-      <app-loading-state label="Loading tasks..." />
+      <app-loading-state label="tasks.catalog.loading" />
     } @else if (errorMessage()) {
-      <app-error-state [message]="errorMessage() ?? 'Could not load tasks.'" (retry)="reload()" />
+      <app-error-state
+        [message]="errorMessage() ?? ('tasks.catalog.loadError' | t)"
+        (retry)="reload()"
+      />
     } @else if (tasksPage(); as page) {
       @if (page.content.length === 0) {
-        <app-empty-state
-          title="No published tasks yet"
-          message="Published tasks will appear here when they are available."
-        />
+        <app-empty-state title="tasks.catalog.emptyTitle" message="tasks.catalog.emptyMessage" />
       } @else {
-        <section class="catalog-table" aria-label="Task catalog">
+        <section class="catalog-table" [attr.aria-label]="'tasks.catalog.aria' | t">
           <div class="catalog-row catalog-row-header">
-            <span>Task</span>
-            <span>Difficulty</span>
-            <span>Topic</span>
+            <span>{{ 'tasks.catalog.column.task' | t }}</span>
+            <span>{{ 'tasks.catalog.column.difficulty' | t }}</span>
+            <span>{{ 'tasks.catalog.column.topic' | t }}</span>
           </div>
 
           @for (task of page.content; track task.id) {
@@ -183,6 +188,7 @@ export class TasksPage {
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly i18n = inject(I18nService);
   private readonly tasksApi = inject(TasksApiService);
 
   protected readonly loading = signal(true);
@@ -205,7 +211,7 @@ export class TasksPage {
         switchMap((query) => {
           return this.tasksApi.listTasks(query).pipe(
             catchError((error: ApiError) => {
-              this.errorMessage.set(error.message);
+              this.errorMessage.set(this.i18n.translateApiError(error, 'tasks.catalog.loadError'));
               return of(null);
             }),
           );
@@ -242,7 +248,7 @@ export class TasksPage {
         this.loading.set(false);
       },
       error: (error: ApiError) => {
-        this.errorMessage.set(error.message);
+        this.errorMessage.set(this.i18n.translateApiError(error, 'tasks.catalog.loadError'));
         this.loading.set(false);
       },
     });

@@ -2,34 +2,36 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ApiError } from '../../core/api/api-error';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { AuthApiService } from './auth-api.service';
 
 type VerifyState = 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-verify-email-page',
-  imports: [RouterLink],
+  imports: [I18nPipe, RouterLink],
   template: `
     <section class="auth-page">
       <div class="auth-copy">
-        <p class="eyebrow">Email verification</p>
-        <h1>Verify email</h1>
-        <p class="supporting">Confirm your email before signing in.</p>
+        <p class="eyebrow">{{ 'auth.eyebrow.emailVerification' | t }}</p>
+        <h1>{{ 'auth.verify.title' | t }}</h1>
+        <p class="supporting">{{ 'auth.verify.supporting' | t }}</p>
       </div>
 
       <div class="auth-form">
         @if (state() === 'loading') {
-          <p class="supporting">Verifying email...</p>
+          <p class="supporting">{{ 'auth.verify.loading' | t }}</p>
         } @else if (state() === 'success') {
           <p class="api-success">{{ message() }}</p>
           <div class="form-links">
-            <a routerLink="/login">Go to login</a>
+            <a routerLink="/login">{{ 'auth.verify.goToLogin' | t }}</a>
           </div>
         } @else {
           <p class="api-error">{{ message() }}</p>
           <div class="form-links">
-            <a routerLink="/resend-verification">Request a new link</a>
-            <a routerLink="/login">Back to login</a>
+            <a routerLink="/resend-verification">{{ 'auth.verify.requestNewLink' | t }}</a>
+            <a routerLink="/login">{{ 'auth.verify.backToLogin' | t }}</a>
           </div>
         }
       </div>
@@ -39,28 +41,29 @@ type VerifyState = 'loading' | 'success' | 'error';
 })
 export class VerifyEmailPage implements OnInit {
   private readonly authApi = inject(AuthApiService);
+  private readonly i18n = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
 
   protected readonly state = signal<VerifyState>('loading');
-  protected readonly message = signal('Verifying email...');
+  protected readonly message = signal('');
 
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
 
     if (!token) {
       this.state.set('error');
-      this.message.set('Verification token is missing.');
+      this.message.set(this.i18n.translate('auth.verify.missingToken'));
       return;
     }
 
     this.authApi.verifyEmail({ token }).subscribe({
-      next: ({ message }) => {
+      next: (response) => {
         this.state.set('success');
-        this.message.set(message);
+        this.message.set(this.i18n.translateBackendMessage(response, 'auth.verify.success'));
       },
       error: (error: ApiError) => {
         this.state.set('error');
-        this.message.set(error.message);
+        this.message.set(this.i18n.translateApiError(error, 'api.error.generic'));
       },
     });
   }

@@ -1,14 +1,17 @@
 import { Component, input, output } from '@angular/core';
 
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+
 @Component({
   selector: 'app-error-state',
+  imports: [I18nPipe],
   template: `
     <div class="state" role="alert">
       <div>
-        <h2>{{ title() }}</h2>
-        <p>{{ message() }}</p>
+        <h2>{{ title() | t }}</h2>
+        <p>{{ message() | t }}</p>
       </div>
-      <button type="button" (click)="retry.emit()">Retry</button>
+      <button type="button" (click)="retry.emit()">{{ 'shared.error.retry' | t }}</button>
     </div>
   `,
   styles: `
@@ -46,7 +49,7 @@ import { Component, input, output } from '@angular/core';
   `,
 })
 export class ErrorState {
-  readonly title = input('Something went wrong');
-  readonly message = input('Please try again.');
+  readonly title = input('shared.error.title');
+  readonly message = input('shared.error.message');
   readonly retry = output<void>();
 }

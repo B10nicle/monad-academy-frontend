@@ -4,32 +4,32 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { ApiError } from '../../core/api/api-error';
 import { SessionService } from '../../core/auth/session.service';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { AuthApiService } from './auth-api.service';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [I18nPipe, ReactiveFormsModule, RouterLink],
   template: `
     <section class="auth-page">
       <div class="auth-copy">
-        <p class="eyebrow">Account</p>
-        <h1>Log in</h1>
-        <p class="supporting">
-          Continue to your task history, submissions, and protected practice workspace.
-        </p>
+        <p class="eyebrow">{{ 'auth.eyebrow.account' | t }}</p>
+        <h1>{{ 'auth.login.title' | t }}</h1>
+        <p class="supporting">{{ 'auth.login.supporting' | t }}</p>
       </div>
 
       <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
         <div class="field">
-          <label for="login">Email or username</label>
+          <label for="login">{{ 'auth.login.loginLabel' | t }}</label>
           <input id="login" type="text" formControlName="login" autocomplete="username" />
           @if (showRequiredError('login')) {
-            <p class="field-error">Login is required.</p>
+            <p class="field-error">{{ 'auth.login.loginRequired' | t }}</p>
           }
         </div>
 
         <div class="field">
-          <label for="password">Password</label>
+          <label for="password">{{ 'form.password' | t }}</label>
           <input
             id="password"
             type="password"
@@ -37,7 +37,7 @@ import { AuthApiService } from './auth-api.service';
             autocomplete="current-password"
           />
           @if (showRequiredError('password')) {
-            <p class="field-error">Password is required.</p>
+            <p class="field-error">{{ 'auth.login.passwordRequired' | t }}</p>
           }
         </div>
 
@@ -46,12 +46,12 @@ import { AuthApiService } from './auth-api.service';
         }
 
         <button class="submit-button" type="submit" [disabled]="form.invalid || submitting()">
-          {{ submitting() ? 'Logging in...' : 'Log in' }}
+          {{ submitting() ? ('auth.login.submitting' | t) : ('auth.login.submit' | t) }}
         </button>
 
         <div class="form-links">
-          <a routerLink="/register">Create account</a>
-          <a routerLink="/resend-verification">Resend verification</a>
+          <a routerLink="/register">{{ 'auth.login.createAccount' | t }}</a>
+          <a routerLink="/resend-verification">{{ 'auth.login.resendVerification' | t }}</a>
         </div>
       </form>
     </section>
@@ -61,6 +61,7 @@ import { AuthApiService } from './auth-api.service';
 export class LoginPage {
   private readonly authApi = inject(AuthApiService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18n = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly session = inject(SessionService);
@@ -91,12 +92,12 @@ export class LoginPage {
           await this.router.navigateByUrl(this.redirectTarget());
         } catch {
           this.session.logout();
-          this.errorMessage.set('Could not load the current user.');
+          this.errorMessage.set(this.i18n.translate('auth.login.currentUserError'));
           this.submitting.set(false);
         }
       },
       error: (error: ApiError) => {
-        this.errorMessage.set(readAuthErrorMessage(error));
+        this.errorMessage.set(this.i18n.translateApiError(error, 'auth.login.invalidCredentials'));
         this.submitting.set(false);
       },
     });
@@ -110,20 +111,4 @@ export class LoginPage {
   private redirectTarget(): string {
     return this.route.snapshot.queryParamMap.get('redirectTo') ?? '/tasks';
   }
-}
-
-function readAuthErrorMessage(error: ApiError): string {
-  if (error.code === 'EMAIL_NOT_VERIFIED') {
-    return 'Email is not verified. Verify your email or request a new verification link.';
-  }
-
-  if (error.code === 'USER_BLOCKED') {
-    return 'This account is blocked.';
-  }
-
-  if (error.status === 401) {
-    return 'Invalid login or password.';
-  }
-
-  return error.message;
 }

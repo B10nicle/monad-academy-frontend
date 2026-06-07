@@ -3,42 +3,42 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { ApiError } from '../../core/api/api-error';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import { AuthApiService } from './auth-api.service';
 
 @Component({
   selector: 'app-register-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [I18nPipe, ReactiveFormsModule, RouterLink],
   template: `
     <section class="auth-page">
       <div class="auth-copy">
-        <p class="eyebrow">Account</p>
-        <h1>Create account</h1>
-        <p class="supporting">
-          Register to submit solutions and keep your personal attempt history.
-        </p>
+        <p class="eyebrow">{{ 'auth.eyebrow.account' | t }}</p>
+        <h1>{{ 'auth.register.title' | t }}</h1>
+        <p class="supporting">{{ 'auth.register.supporting' | t }}</p>
       </div>
 
       <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
         <div class="field">
-          <label for="email">Email</label>
+          <label for="email">{{ 'form.email' | t }}</label>
           <input id="email" type="email" formControlName="email" autocomplete="email" />
           @if (showRequiredError('email')) {
-            <p class="field-error">Email is required.</p>
+            <p class="field-error">{{ 'form.emailRequired' | t }}</p>
           } @else if (form.controls.email.hasError('email')) {
-            <p class="field-error">Enter a valid email.</p>
+            <p class="field-error">{{ 'form.validEmail' | t }}</p>
           }
         </div>
 
         <div class="field">
-          <label for="username">Username</label>
+          <label for="username">{{ 'form.username' | t }}</label>
           <input id="username" type="text" formControlName="username" autocomplete="username" />
           @if (showRequiredError('username')) {
-            <p class="field-error">Username is required.</p>
+            <p class="field-error">{{ 'form.usernameRequired' | t }}</p>
           }
         </div>
 
         <div class="field">
-          <label for="password">Password</label>
+          <label for="password">{{ 'form.password' | t }}</label>
           <input
             id="password"
             type="password"
@@ -46,7 +46,7 @@ import { AuthApiService } from './auth-api.service';
             autocomplete="new-password"
           />
           @if (showRequiredError('password')) {
-            <p class="field-error">Password is required.</p>
+            <p class="field-error">{{ 'form.passwordRequired' | t }}</p>
           }
         </div>
 
@@ -58,12 +58,12 @@ import { AuthApiService } from './auth-api.service';
         }
 
         <button class="submit-button" type="submit" [disabled]="form.invalid || submitting()">
-          {{ submitting() ? 'Creating account...' : 'Create account' }}
+          {{ submitting() ? ('auth.register.submitting' | t) : ('auth.register.submit' | t) }}
         </button>
 
         <div class="form-links">
-          <a routerLink="/login">Already have an account?</a>
-          <a routerLink="/resend-verification">Resend verification</a>
+          <a routerLink="/login">{{ 'auth.register.alreadyHaveAccount' | t }}</a>
+          <a routerLink="/resend-verification">{{ 'auth.login.resendVerification' | t }}</a>
         </div>
       </form>
     </section>
@@ -73,6 +73,7 @@ import { AuthApiService } from './auth-api.service';
 export class RegisterPage {
   private readonly authApi = inject(AuthApiService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18n = inject(I18nService);
 
   protected readonly submitting = signal(false);
   protected readonly successMessage = signal<string | null>(null);
@@ -96,13 +97,15 @@ export class RegisterPage {
     this.errorMessage.set(null);
 
     this.authApi.register(this.form.getRawValue()).subscribe({
-      next: ({ message }) => {
-        this.successMessage.set(message);
+      next: (response) => {
+        this.successMessage.set(
+          this.i18n.translateBackendMessage(response, 'auth.register.success'),
+        );
         this.form.reset();
         this.submitting.set(false);
       },
       error: (error: ApiError) => {
-        this.errorMessage.set(error.message);
+        this.errorMessage.set(this.i18n.translateApiError(error, 'api.error.generic'));
         this.submitting.set(false);
       },
     });

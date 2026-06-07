@@ -6,6 +6,8 @@ import { catchError, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs'
 
 import { ApiError } from '../../core/api/api-error';
 import { PageResponse } from '../../core/api/page-response';
+import { I18nPipe } from '../../core/i18n/i18n.pipe';
+import { I18nService } from '../../core/i18n/i18n.service';
 import {
   SubmissionStatus,
   SubmissionStatusBadge,
@@ -38,6 +40,7 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
   imports: [
     EmptyState,
     ErrorState,
+    I18nPipe,
     LoadingState,
     Pagination,
     ReactiveFormsModule,
@@ -47,66 +50,76 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
   template: `
     <section class="page-header">
       <div>
-        <p class="eyebrow">Admin submissions</p>
-        <h1>Submission review</h1>
+        <p class="eyebrow">{{ 'admin.submissions.eyebrow' | t }}</p>
+        <h1>{{ 'admin.submissions.title' | t }}</h1>
       </div>
 
-      <a class="secondary-link" routerLink="/admin">Admin home</a>
+      <a class="secondary-link" routerLink="/admin">{{ 'admin.home' | t }}</a>
     </section>
 
     <form class="filters" [formGroup]="filtersForm" (ngSubmit)="applyFilters()">
       <label>
-        User id
-        <input type="text" formControlName="userId" placeholder="User ID" />
+        {{ 'admin.submissions.userId' | t }}
+        <input
+          type="text"
+          formControlName="userId"
+          [placeholder]="'admin.submissions.userId' | t"
+        />
       </label>
       <label>
-        Task id
-        <input type="text" formControlName="taskId" placeholder="Task ID" />
+        {{ 'admin.submissions.taskId' | t }}
+        <input
+          type="text"
+          formControlName="taskId"
+          [placeholder]="'admin.submissions.taskId' | t"
+        />
       </label>
       <label>
-        Status
+        {{ 'admin.submissions.status' | t }}
         <select formControlName="status">
-          <option value="">All statuses</option>
+          <option value="">{{ 'admin.submissions.allStatuses' | t }}</option>
           @for (status of statuses; track status) {
-            <option [value]="status">{{ status }}</option>
+            <option [value]="status">{{ 'enum.submissionStatus.' + status | t }}</option>
           }
         </select>
       </label>
       <div class="filter-actions">
-        <button type="submit">Apply</button>
-        <button type="button" class="secondary-button" (click)="resetFilters()">Reset</button>
+        <button type="submit">{{ 'admin.submissions.apply' | t }}</button>
+        <button type="button" class="secondary-button" (click)="resetFilters()">
+          {{ 'admin.submissions.reset' | t }}
+        </button>
       </div>
     </form>
 
     @if (loading()) {
-      <app-loading-state label="Loading submissions..." />
+      <app-loading-state label="admin.submissions.loading" />
     } @else if (errorMessage()) {
       <app-error-state
-        [message]="errorMessage() ?? 'Could not load submissions.'"
+        [message]="errorMessage() ?? ('admin.submissions.loadError' | t)"
         (retry)="reload()"
       />
     } @else if (submissionsPage(); as page) {
       <section class="table-summary">
         <strong>{{ page.totalElements }}</strong>
-        <span>submissions found</span>
+        <span>{{ 'admin.submissions.found' | t }}</span>
       </section>
 
       @if (page.content.length === 0) {
         <app-empty-state
-          title="No submissions found"
-          message="Try adjusting user, task, or status filters."
+          title="admin.submissions.emptyTitle"
+          message="admin.submissions.emptyMessage"
         />
       } @else {
-        <section class="submissions-table" aria-label="Admin submission review">
+        <section class="submissions-table" [attr.aria-label]="'admin.submissions.tableAria' | t">
           <div class="submission-row submission-row-header">
-            <span>Id</span>
-            <span>User</span>
-            <span>Task</span>
-            <span>Status</span>
-            <span>Duration</span>
-            <span>Created</span>
-            <span>Updated</span>
-            <span>Actions</span>
+            <span>{{ 'admin.submissions.column.id' | t }}</span>
+            <span>{{ 'admin.submissions.column.user' | t }}</span>
+            <span>{{ 'admin.submissions.column.task' | t }}</span>
+            <span>{{ 'admin.submissions.column.status' | t }}</span>
+            <span>{{ 'admin.submissions.column.duration' | t }}</span>
+            <span>{{ 'admin.submissions.column.created' | t }}</span>
+            <span>{{ 'admin.submissions.column.updated' | t }}</span>
+            <span>{{ 'admin.submissions.column.actions' | t }}</span>
           </div>
 
           @for (submission of page.content; track submission.id) {
@@ -120,10 +133,10 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
               <span>{{ submission.updatedAt }}</span>
               <span class="actions">
                 <button type="button" (click)="selectedSourceCode.set(submission.sourceCode)">
-                  Source
+                  {{ 'submissions.action.source' | t }}
                 </button>
                 <button type="button" (click)="selectedMetadata.set(submission.executionMetadata)">
-                  Metadata
+                  {{ 'submissions.action.metadata' | t }}
                 </button>
               </span>
             </div>
@@ -139,11 +152,17 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
     }
 
     @if (selectedSourceCode(); as sourceCode) {
-      <div class="preview-backdrop" role="dialog" aria-label="Submitted source code">
+      <div
+        class="preview-backdrop"
+        role="dialog"
+        [attr.aria-label]="'submissions.sourceDialogAria' | t"
+      >
         <div class="preview-card">
           <div class="preview-heading">
-            <h2>Submitted source</h2>
-            <button type="button" (click)="selectedSourceCode.set(null)">Close</button>
+            <h2>{{ 'submissions.submittedSource' | t }}</h2>
+            <button type="button" (click)="selectedSourceCode.set(null)">
+              {{ 'tasks.detail.close' | t }}
+            </button>
           </div>
           <pre>{{ sourceCode }}</pre>
         </div>
@@ -151,18 +170,24 @@ const SUBMISSION_STATUSES: SubmissionStatus[] = [
     }
 
     @if (selectedMetadata() !== null) {
-      <div class="preview-backdrop" role="dialog" aria-label="Execution metadata">
+      <div
+        class="preview-backdrop"
+        role="dialog"
+        [attr.aria-label]="'submissions.metadataDialogAria' | t"
+      >
         <div class="preview-card">
           <div class="preview-heading">
-            <h2>Execution metadata</h2>
-            <button type="button" (click)="selectedMetadata.set(null)">Close</button>
+            <h2>{{ 'submissions.executionMetadata' | t }}</h2>
+            <button type="button" (click)="selectedMetadata.set(null)">
+              {{ 'tasks.detail.close' | t }}
+            </button>
           </div>
           @if (formatMetadata(selectedMetadata()); as metadata) {
             <pre>{{ metadata }}</pre>
           } @else {
             <app-empty-state
-              title="No execution metadata"
-              message="This submission does not include execution metadata."
+              title="submissions.noMetadataTitle"
+              message="submissions.noMetadataMessage"
             />
           }
         </div>
@@ -393,6 +418,7 @@ export class AdminSubmissionsPage {
   private readonly adminSubmissionsApi = inject(AdminSubmissionsApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly i18n = inject(I18nService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -436,7 +462,9 @@ export class AdminSubmissionsPage {
         switchMap((query) =>
           this.adminSubmissionsApi.listSubmissions(query).pipe(
             catchError((error: ApiError) => {
-              this.errorMessage.set(error.message);
+              this.errorMessage.set(
+                this.i18n.translateApiError(error, 'admin.submissions.loadError'),
+              );
               return of(null);
             }),
           ),
@@ -502,7 +530,7 @@ export class AdminSubmissionsPage {
         this.loading.set(false);
       },
       error: (error: ApiError) => {
-        this.errorMessage.set(error.message);
+        this.errorMessage.set(this.i18n.translateApiError(error, 'admin.submissions.loadError'));
         this.loading.set(false);
       },
     });
